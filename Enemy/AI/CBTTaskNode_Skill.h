@@ -17,6 +17,7 @@ private:
 public:
 	UCBTTaskNode_Skill();
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 protected:
 	class UCSkill* ChoiceSkill(class ACCharacter* OwnerCharacter);

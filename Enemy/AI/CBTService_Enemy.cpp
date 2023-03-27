@@ -51,20 +51,28 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	}
 	else if (distance < controller->GetMiddleActionRange())
 	{
-		//if(access)
+		if(access)
 		{
 			behavior->SetAccessMode();
+		}
+		else
+		{
+			behavior->SetmiddleActionMode();
 		}
 	}
 	else if (distance < controller->GetFarActionRange())
 	{
-		//if(access)
+		if(access)
 		{
 			behavior->SetAccessMode();
 		}
+		else
+		{
+			//TODO : 장거리 스킬 구현후 교체
+			behavior->SetWaitMode();
+			CLog::Log("FatSkill_Excute");
+		}
 	}
-
-
 }
 
 
