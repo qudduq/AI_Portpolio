@@ -46,9 +46,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		class ACCharacter* OwnerCharacter;
 
-private:
-
-
 };
 
 

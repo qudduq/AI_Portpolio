@@ -10,6 +10,7 @@ class AI_PORTPOLIO_API UCWidgetDrag : public UDragDropOperation
 	GENERATED_BODY()
 	
 public:
-	class UUserWidget* WidgetReference;
+	UPROPERTY()
+		class UUserWidget* WidgetReference;
 	FVector2D DragOffset;
 };

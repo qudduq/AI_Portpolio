@@ -18,5 +18,6 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	UUserWidget* WidgetRefernce;
+	UPROPERTY()
+		UUserWidget* WidgetRefernce;
 };

@@ -2,6 +2,8 @@
 #include "Components/CBehaviorComponent.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
+#include "Utillities/CLog.h"
 
 ACEnemy_AI::ACEnemy_AI()
 {

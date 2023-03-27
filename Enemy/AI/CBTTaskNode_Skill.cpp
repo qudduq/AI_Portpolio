@@ -17,12 +17,21 @@ UCBTTaskNode_Skill::UCBTTaskNode_Skill()
 EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
+	if(controller == nullptr)
+	{
+		return Super::ExecuteTask(OwnerComp, NodeMemory);
+	}
+
 	ACEnemy_AI* owner = Cast<ACEnemy_AI>(controller->GetPawn());
+	if(owner == nullptr)
+	{
+		return Super::ExecuteTask(OwnerComp, NodeMemory);
+	}
 
 	UCStateComponent* stateComponent = Cast<UCStateComponent>(owner->GetComponentByClass(UCStateComponent::StaticClass()));
 	if (stateComponent == nullptr)
 	{
-		return EBTNodeResult::Failed;
+		return Super::ExecuteTask(OwnerComp, NodeMemory);
 	}
 
 	stateComponent->OnIdleMode.BindUObject(this, &UCBTTaskNode_Skill::EndAction);
@@ -33,7 +42,7 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 		str += UEnum::GetValueAsString(SkillDistance);
 		str += " have Not Skill";
 		CLog::Log(str);
-		return EBTNodeResult::Failed;
+		return Super::ExecuteTask(OwnerComp, NodeMemory);
 	}
 	skill->ExcuteSkill(owner);
 

@@ -79,8 +79,10 @@ private:
 	FVector Enemylocation;
 
 private:
-	class UCListView* SkillList;
-	class UCQuickSlotBar_Widget* QuickSlotBar;
+	UPROPERTY()
+		class UCListView* SkillList;
+	UPROPERTY()
+		class UCQuickSlotBar_Widget* QuickSlotBar;
 	//TSharedPtr<class CameraShakeManager> CameraShake;
 	FTimerHandle handle;
 

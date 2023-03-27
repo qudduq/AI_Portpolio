@@ -38,9 +38,15 @@ public:
 	FOnEndSkill OnEndSkill;
 
 private:
-	class ACharacter* OwnerCharacter;
-	class UCSkillData* Data;
-	UCWeaponComponent* Weapon;
+	UPROPERTY()
+		class ACharacter* OwnerCharacter;
+
+	UPROPERTY()
+		class UCSkillData* Data;
+
+	UPROPERTY()
+		UCWeaponComponent* Weapon;
+
 	EWeaponType WeaponType = EWeaponType::Unarmed;
 
 };

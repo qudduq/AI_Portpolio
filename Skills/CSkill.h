@@ -35,8 +35,11 @@ private:
 	void HitCancle();
 
 protected:
-	class UCStateComponent* State;
-	class ACCharacter* OwnerCharacter;
+	UPROPERTY()
+		class UCStateComponent* State;
+
+	UPROPERTY()
+		class ACCharacter* OwnerCharacter;
 
 private:
 	FDelegateHandle HitCancleHandle;

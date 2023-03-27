@@ -67,6 +67,7 @@ public:
 	FBehaviorTypeChanged OnBehaviorTypeChanged;
 
 private:
-	class UBlackboardComponent* Blackboard;
+	UPROPERTY()
+		class UBlackboardComponent* Blackboard;
 	EBehaviorType type = EBehaviorType::Wait;
 };

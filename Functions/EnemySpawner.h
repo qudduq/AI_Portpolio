@@ -17,9 +17,7 @@ public:
 	AEnemySpawner();
 
 	void EnemySpanwn();
-	
 
-	
 protected:
 	virtual void BeginPlay() override;
 

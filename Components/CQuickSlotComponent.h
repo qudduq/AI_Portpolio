@@ -21,6 +21,7 @@ public:
 	void QuickSlotCall(FKey slotIndex);
 
 private:
-	class ACharacter* OwnerCharacter;
+	UPROPERTY()
+		class ACharacter* OwnerCharacter;
 	TMap<FKey, class IQuickSlotInterface*> QuickSlotData;
 };

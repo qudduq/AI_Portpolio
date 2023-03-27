@@ -6,7 +6,6 @@
 #include "Components/CStateComponent.h"
 #include "Components/CBehaviorComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "BehaviorTree/BlackboardData.h"
 
 UCBTService_Enemy::UCBTService_Enemy()
 {
@@ -33,13 +32,17 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	if (behavior == nullptr) return;
 
 
-	if(behavior->IsWaitMode() == false)
-		return;
-
 
 	ACPlayer* player = behavior->GetTargetPlayer();
 	if(player == nullptr)
 		return;
+
+	int access = FMath::RandRange(0, 1);
+
+	if(behavior->IsActionMode() == true)
+	{
+		return;
+	}
 
 	float distance = ai->GetDistanceTo(player);
 	if (distance < controller->GetCloseActionRange())
@@ -48,11 +51,17 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	}
 	else if (distance < controller->GetMiddleActionRange())
 	{
-
+		//if(access)
+		{
+			behavior->SetAccessMode();
+		}
 	}
 	else if (distance < controller->GetFarActionRange())
 	{
-
+		//if(access)
+		{
+			behavior->SetAccessMode();
+		}
 	}
 
 

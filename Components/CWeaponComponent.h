@@ -68,14 +68,17 @@ public:
 	FWeaponTypeChanged OnWeaponTypeChanged;
 
 private:
-	class ACCharacter* OwnerCharacter;
+	UPROPERTY()
+		class ACCharacter* OwnerCharacter;
+
+	UPROPERTY()
+		class UCStateComponent* State;
+
 	EWeaponType Type = EWeaponType::Max;
 
 	int Combo_index = 0;
 	bool bNextAction = false;
 	bool bAbleNext = false;
-
-	class UCStateComponent* State;
 
 	TMap<EWeaponType, class ACAttachment*> Weapons;
 };

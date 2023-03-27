@@ -39,9 +39,13 @@ public:
 	UTexture2D* GetImage() { return texture; }
 
 private:
-	class UCSkill* skill;
+	UPROPERTY()
+		class UCSkill* skill;
+
+	UPROPERTY()
+		UTexture2D* texture;
+
 	FTimerHandle handle;
 
 	FVector2D Position;
-	UTexture2D* texture;
 };

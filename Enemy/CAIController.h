@@ -43,8 +43,13 @@ private:
 		void OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors);
 
 private:
-	class ACEnemy_AI* Enemy;
-	class UAISenseConfig_Sight* Sight;
-	class UCBehaviorComponent* Behavior;
+	UPROPERTY()
+		class ACEnemy_AI* Enemy;
+
+	UPROPERTY()
+		class UAISenseConfig_Sight* Sight;
+
+	UPROPERTY()
+		class UCBehaviorComponent* Behavior;
 
 };

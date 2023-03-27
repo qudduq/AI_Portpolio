@@ -29,5 +29,7 @@ protected:
 
 public:
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
-	
+
+	FTimerHandle TimerHandle;
+	FVector currentSpeed;
 };
