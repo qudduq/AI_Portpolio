@@ -17,6 +17,7 @@ void UCWeaponComponent::BeginPlay()
 	Super::BeginPlay();
 	OwnerCharacter = Cast<ACCharacter>(GetOwner());
 	State = Cast<UCStateComponent>(OwnerCharacter->GetComponentByClass(UCStateComponent::StaticClass()));
+	Status = Cast<UCStatusComponent>(OwnerCharacter->GetComponentByClass(UCStatusComponent::StaticClass()));
 
 	OwnerCharacter->OnCharacterHit.Add(FOnCharacterHit::FDelegate::CreateUObject(this, &UCWeaponComponent::HitCancle));
 	for (int32 i = 0; i < (int32)EWeaponType::Max; i++)
@@ -85,6 +86,7 @@ void UCWeaponComponent::DoAction()
 		return;
 
 	State->SetActionMode();
+	Status->Stop();
 
 	OwnerCharacter->PlayAnimMontage(DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage);
 }
@@ -109,6 +111,7 @@ void UCWeaponComponent::BeginDoAction()
 void UCWeaponComponent::EndDoAction()
 {
 	State->SetIdleMode();
+	Status->Move();
 	DisableNext();
 	OffNextAction();
 	Combo_index = 0;

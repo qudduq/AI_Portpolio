@@ -2,12 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BezierTest.generated.h"
-
-DECLARE_DELEGATE_TwoParams(FBezierShoot, FVector, FVector);
+#include "BezierShooter.generated.h"
 
 UCLASS()
-class AI_PORTPOLIO_API ABezierTest : public AActor
+class AI_PORTPOLIO_API ABezierShooter : public AActor
 {
 	GENERATED_BODY()
 
@@ -16,14 +14,14 @@ private:
 		class USceneComponent* Root;
 
 	UPROPERTY(EditAnywhere)
-		class UBoxComponent* OBj;
+		class USphereComponent* Sphere;
 
 private:
 	UPROPERTY(EditAnywhere)
 		class UBezierComponent* Bezier;
 	
 public:	
-	ABezierTest();
+	ABezierShooter();
 
 protected:
 	virtual void BeginPlay() override;
@@ -31,7 +29,5 @@ protected:
 public:
 	void BezierShoot(FVector Enemy, FVector PlayerLocation);
 
-private:
-	FBezierShoot OnBezierShoot;
 
 };
