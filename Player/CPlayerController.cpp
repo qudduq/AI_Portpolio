@@ -33,15 +33,21 @@ void ACPlayerController::SetupInputComponent()
 	InputComponent->BindAction("QuickSlot", IE_Pressed, this, &ACPlayerController::QuickSlot);
 }
 
-void ACPlayerController::BeginPlay()
+void ACPlayerController::OnPossess(APawn* aPawn)
 {
-	Super::BeginPlay();
-	Player = Cast<ACPlayer>(GetPawn());
+	Super::OnPossess(aPawn);
+
 }
 
 void ACPlayerController::MoveForward(float Axis)
 {
-	UCStatusComponent* Status = Cast<UCStatusComponent>(Player->GetComponentByClass(UCStatusComponent::StaticClass()));
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
+	UCStatusComponent* Status = Cast<UCStatusComponent>(CPlayer->GetComponentByClass(UCStatusComponent::StaticClass()));
 	if(Status == nullptr)
 		return;
 
@@ -56,7 +62,13 @@ void ACPlayerController::MoveForward(float Axis)
 
 void ACPlayerController::MoveRight(float Axis)
 {
-	UCStatusComponent* Status = Cast<UCStatusComponent>(Player->GetComponentByClass(UCStatusComponent::StaticClass()));
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
+	UCStatusComponent* Status = Cast<UCStatusComponent>(CPlayer->GetComponentByClass(UCStatusComponent::StaticClass()));
 	if (Status == nullptr)
 		return;
 
@@ -71,6 +83,12 @@ void ACPlayerController::MoveRight(float Axis)
 
 void ACPlayerController::CameraYaw(float Axis)
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	if (bQuterView == false || bMouse == true)
 		return;
 
@@ -82,9 +100,15 @@ void ACPlayerController::CameraYaw(float Axis)
 
 void ACPlayerController::ChangeView()
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	bQuterView = !bQuterView;
 
-	USpringArmComponent* SpringArmComponent = Cast<USpringArmComponent>(Player->GetComponentByClass(USpringArmComponent::StaticClass()));
+	USpringArmComponent* SpringArmComponent = Cast<USpringArmComponent>(CPlayer->GetComponentByClass(USpringArmComponent::StaticClass()));
 	if(SpringArmComponent == nullptr)
 	{
 		return;
@@ -108,6 +132,12 @@ void ACPlayerController::ChangeView()
 
 void ACPlayerController::MoveCamera()
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	if (--camera_count <= 0)
 	{
 		GetWorldTimerManager().ClearTimer(handle);
@@ -122,6 +152,12 @@ void ACPlayerController::MoveCamera()
 
 void ACPlayerController::ChangeWeapon()
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	if (isChanging || bMouse)
 		return;
 
@@ -130,7 +166,13 @@ void ACPlayerController::ChangeWeapon()
 	weaponnum++;
 	weaponnum >= (int)EWeaponType::Max ? weaponnum = 0 : weaponnum;
 	CLog::Log(weaponnum);
-	UCWeaponComponent* Weapon = Cast<UCWeaponComponent>(Player->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
+	UCWeaponComponent* Weapon = Cast<UCWeaponComponent>(CPlayer->GetComponentByClass(UCWeaponComponent::StaticClass()));
 	if(Weapon == nullptr)
 	{
 		return;
@@ -146,29 +188,41 @@ void ACPlayerController::ChangeWeapon()
 		break;
 	}
 
-	UCSkillComponent* Skill = Cast<UCSkillComponent>(Player->GetComponentByClass(UCSkillComponent::StaticClass()));
+	UCSkillComponent* Skill = Cast<UCSkillComponent>(CPlayer->GetComponentByClass(UCSkillComponent::StaticClass()));
 	if(Skill == nullptr)
 	{
 		return;
 	}
-	Player->GetSkillList()->SetSKills(Skill->GetSkillData());
+	CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData());
 	isChanging = false;
 }
 
 void ACPlayerController::MouseView()
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	bMouse = !bMouse;
 	SetShowMouseCursor(bMouse);
 }
 
 void ACPlayerController::DoAction()
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	if (bMouse)
 	{
 		return;
 	}
 
-	UCWeaponComponent* Weapon = Cast<UCWeaponComponent>(Player->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	UCWeaponComponent* Weapon = Cast<UCWeaponComponent>(CPlayer->GetComponentByClass(UCWeaponComponent::StaticClass()));
 	if(Weapon == nullptr)
 	{
 		return;
@@ -178,12 +232,18 @@ void ACPlayerController::DoAction()
 
 void ACPlayerController::QuickSlot(const FKey SetNum)
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	if (bMouse)
 	{
 		return;
 	}
 
-	UCQuickSlotComponent* QuickSlot = Cast<UCQuickSlotComponent>(Player->GetComponentByClass(UCQuickSlotComponent::StaticClass()));
+	UCQuickSlotComponent* QuickSlot = Cast<UCQuickSlotComponent>(CPlayer->GetComponentByClass(UCQuickSlotComponent::StaticClass()));
 	if(QuickSlot == nullptr)
 	{
 		return;
@@ -193,17 +253,29 @@ void ACPlayerController::QuickSlot(const FKey SetNum)
 
 void ACPlayerController::CLickSkillList()
 {
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
 	bSkillList = !bSkillList;
 
 	if (bSkillList)
-		Player->GetSkillList()->COpenSkills();
+		CPlayer->GetSkillList()->COpenSkills();
 	else
-		Player->GetSkillList()->CCloseSkills();
+		CPlayer->GetSkillList()->CCloseSkills();
 
 	MouseView();
 }
 
 void ACPlayerController::Jump()
 {
-	Player->Jump();
+	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	if (CPlayer == nullptr)
+	{
+		return;
+	}
+
+	CPlayer->Jump();
 }

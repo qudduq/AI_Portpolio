@@ -19,7 +19,7 @@ public:
 
 protected:
 	virtual void SetupInputComponent() override;
-	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* aPawn) override;
 
 private:
 	void MoveForward(float Axis);
@@ -37,7 +37,6 @@ private:
 	void CLickSkillList();
 
 private:
-	class ACPlayer* Player;
 	FTimerHandle handle;
 	int weaponnum = 0;
 	int camera_count;
