@@ -20,13 +20,15 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterMovement")
 		float Pitch;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterMovement")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Replicated, Category = "CharacterMovement")
 		EWeaponType WeaponType = EWeaponType::Max;
 
 
 public:
 	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty > & OutLifetimeProps) const override;
 
 private:
 	UFUNCTION()

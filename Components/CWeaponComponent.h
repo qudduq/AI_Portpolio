@@ -45,8 +45,8 @@ public:
 
 	void DoAction();
 
-	void EndDoAction();
 	void BeginDoAction();
+	void EndDoAction();
 
 	void EnableNext();
 	void DisableNext();
@@ -56,14 +56,22 @@ public:
 	void SpawnWeapon(EWeaponType weapon);
 	FDamageData GetDamageData();
 
+public:
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty > & OutLifetimeProps) const override;
+
 private:
 	void HitCancle();
+
+	UFUNCTION(NetMulticast, Reliable)
+		void PlayMontage(UAnimMontage* montage);
+
 
 protected:	
 	virtual void BeginPlay() override;
 
 private:
-	void ChangeType(EWeaponType InType);
+	UFUNCTION(NetMulticast, Reliable)
+		void ChangeType(EWeaponType InType);
 
 public:
 	FWeaponTypeChanged OnWeaponTypeChanged;
@@ -74,7 +82,9 @@ private:
 	class UCStatusComponent* Status;
 
 	TMap<EWeaponType, class ACAttachment*> Weapons;
-	EWeaponType Type = EWeaponType::Max;
+
+	UPROPERTY(Replicated)
+		EWeaponType Type = EWeaponType::Max;
 
 	int Combo_index = 0;
 	bool bNextAction = false;

@@ -5,12 +5,21 @@
 #include "GameFramework/Character.h"
 #include "CStateComponent.h"
 #include "CStatusComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "Weapon/CAttachment.h"
 #include "Weapon/CWeaponAsset.h"
 
 UCWeaponComponent::UCWeaponComponent()
 {
+	
 }
+
+void UCWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UCWeaponComponent, Type);
+}
+
 
 void UCWeaponComponent::BeginPlay()
 {
@@ -28,7 +37,7 @@ void UCWeaponComponent::BeginPlay()
 		//세팅해주는것과 소유하고있는 것은 다르다.
 		if (AttachmentClasses[i] != nullptr)
 		{
-			Weapons.Add((EWeaponType)i, OwnerCharacter->GetWorld()->SpawnActor<ACAttachment>(AttachmentClasses[i], params));
+			SpawnWeapon(EWeaponType(i));
 		}
 		else
 		{
@@ -48,7 +57,11 @@ void UCWeaponComponent::BeginPlay()
 			CLog::Log(outStr);
 		}
 	}
+
+	SetIsReplicated(true);
 }
+
+
 
 void UCWeaponComponent::SetUnarmedMode() 
 {
@@ -64,7 +77,6 @@ void UCWeaponComponent::SetBowMode()
 {
 	ChangeType(EWeaponType::Bow);
 }
-
 
 void UCWeaponComponent::DoAction()
 {
@@ -89,8 +101,10 @@ void UCWeaponComponent::DoAction()
 	State->SetActionMode();
 	Status->Stop();
 
-	OwnerCharacter->PlayAnimMontage(DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage);
+	//OwnerCharacter->PlayAnimMontage(DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage);
+	PlayMontage(DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage);
 }
+
 
 void UCWeaponComponent::BeginDoAction()
 {
@@ -106,7 +120,7 @@ void UCWeaponComponent::BeginDoAction()
 		return;
 	}
 
-	OwnerCharacter->PlayAnimMontage(montage);
+	PlayMontage(montage);
 }
 
 void UCWeaponComponent::EndDoAction()
@@ -118,7 +132,7 @@ void UCWeaponComponent::EndDoAction()
 	Combo_index = 0;
 }
 
-void UCWeaponComponent::ChangeType(EWeaponType InType)
+void UCWeaponComponent::ChangeType_Implementation(EWeaponType InType)
 {
 	Type = InType;
 
@@ -165,6 +179,11 @@ FDamageData UCWeaponComponent::GetDamageData()
 void UCWeaponComponent::HitCancle()
 {
 	EndDoAction();
+}
+
+void UCWeaponComponent::PlayMontage_Implementation(UAnimMontage* montage)
+{
+	OwnerCharacter->PlayAnimMontage(montage);
 }
 
 

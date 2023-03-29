@@ -44,4 +44,5 @@ private:
 	bool isChanging = false;
 	bool bMouse = false;
 	bool bSkillList = false;
+
 };
