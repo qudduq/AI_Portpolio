@@ -44,6 +44,7 @@ public:
 	UCWeaponComponent();
 
 	void DoAction();
+
 	void EndDoAction();
 	void BeginDoAction();
 

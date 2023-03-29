@@ -19,7 +19,7 @@ public class AI_Portpolio : ModuleRules
 			"Slate",
 			"SlateCore",
 			"AIModule",
-			"GameplayTasks"
+			"GameplayTasks",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] 

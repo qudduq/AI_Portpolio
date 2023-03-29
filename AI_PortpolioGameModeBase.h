@@ -11,5 +11,5 @@ class AI_PORTPOLIO_API AAI_PortpolioGameModeBase : public AGameModeBase
 
 public:
 	AAI_PortpolioGameModeBase();
-	
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 };

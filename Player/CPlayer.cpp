@@ -1,16 +1,15 @@
 #include "CPlayer.h"
+
+#include "CPlayerController.h"
 #include "Utillities/CLog.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CWeaponComponent.h"
-#include "Components/CSkillComponent.h"
 #include "Widget/CListView.h"
 #include "Widget/CQuickSlotBar_Widget.h"
 #include "Engine/StreamableManager.h"
-#include "Skills/BezierShooter.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Components/CQuickSlotComponent.h"
 
 

@@ -65,6 +65,7 @@ void UCWeaponComponent::SetBowMode()
 	ChangeType(EWeaponType::Bow);
 }
 
+
 void UCWeaponComponent::DoAction()
 {
 	if (Type == EWeaponType::Unarmed)

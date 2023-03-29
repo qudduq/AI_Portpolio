@@ -15,7 +15,7 @@ class AI_PORTPOLIO_API ACCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly)
+	UPROPERTY( VisibleDefaultsOnly)
 		class UCStateComponent* State;
 
 	UPROPERTY(VisibleDefaultsOnly)

@@ -114,7 +114,7 @@ void ACCharacter::CameraShaking()
 		return;
 
 	APlayerController* controller = GetWorld()->GetFirstPlayerController();
-	controller->PlayerCameraManager->PlayCameraShake(DamageData->CameraShake);
+	controller->PlayerCameraManager->StartMatineeCameraShake(DamageData->CameraShake);
 }
 
 void ACCharacter::End_Hitted()

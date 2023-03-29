@@ -43,9 +43,7 @@ protected:
 	virtual void BeginPlay() override;	
 
 private:
-	UPROPERTY()
-		class UCListView* SkillList;
-	UPROPERTY()
-		class UCQuickSlotBar_Widget* QuickSlotBar;
+	class UCListView* SkillList;
+	class UCQuickSlotBar_Widget* QuickSlotBar;
 
 };
