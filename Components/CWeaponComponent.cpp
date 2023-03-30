@@ -21,6 +21,22 @@ void UCWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 }
 
 
+void UCWeaponComponent::PlayMontage_Implementation(UAnimMontage* montage)
+{
+	OwnerCharacter->PlayAnimMontage(montage);
+}
+
+
+void UCWeaponComponent::ClientPlayMontage_Implementation(UAnimMontage* Montage)
+{
+	ServerPlayMontage(Montage);
+}
+
+void UCWeaponComponent::ServerPlayMontage_Implementation(UAnimMontage* Montage)
+{
+	PlayMontage(Montage);
+}
+
 void UCWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -61,21 +77,51 @@ void UCWeaponComponent::BeginPlay()
 	SetIsReplicated(true);
 }
 
+void UCWeaponComponent::ClientChangeType_Implementation(EWeaponType InType)
+{
+	ServerChangeType(InType);
+}
+
+void UCWeaponComponent::ServerChangeType_Implementation(EWeaponType InType)
+{
+	ChangeType(InType);
+}
 
 
 void UCWeaponComponent::SetUnarmedMode() 
 {
-	ChangeType(EWeaponType::Unarmed);
+	if (OwnerCharacter->HasAuthority())
+	{
+		ServerChangeType(EWeaponType::Unarmed);
+	}
+	else
+	{
+		ClientChangeType(EWeaponType::Unarmed);
+	}
 }
 
 void UCWeaponComponent::SetOneHandMode()
 {
-	ChangeType(EWeaponType::OneHand);
+	if (OwnerCharacter->HasAuthority())
+	{
+		ServerChangeType(EWeaponType::OneHand);
+	}
+	else
+	{
+		ClientChangeType(EWeaponType::OneHand);
+	}
 }
 	
 void UCWeaponComponent::SetBowMode()
 {
-	ChangeType(EWeaponType::Bow);
+	if (OwnerCharacter->HasAuthority())
+	{
+		ServerChangeType(EWeaponType::Bow);
+	}
+	else
+	{
+		ClientChangeType(EWeaponType::Bow);
+	}
 }
 
 void UCWeaponComponent::DoAction()
@@ -100,9 +146,16 @@ void UCWeaponComponent::DoAction()
 
 	State->SetActionMode();
 	Status->Stop();
+	UAnimMontage* montage = DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage;
 
-	//OwnerCharacter->PlayAnimMontage(DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage);
-	PlayMontage(DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage);
+	if(OwnerCharacter->HasAuthority())
+	{
+		ServerPlayMontage(montage);
+	}
+	else
+	{
+		ClientPlayMontage(montage);
+	}
 }
 
 
@@ -120,7 +173,14 @@ void UCWeaponComponent::BeginDoAction()
 		return;
 	}
 
-	PlayMontage(montage);
+	if (OwnerCharacter->HasAuthority())
+	{
+		ServerPlayMontage(montage);
+	}
+	else
+	{
+		ClientPlayMontage(montage);
+	}
 }
 
 void UCWeaponComponent::EndDoAction()
@@ -179,11 +239,6 @@ FDamageData UCWeaponComponent::GetDamageData()
 void UCWeaponComponent::HitCancle()
 {
 	EndDoAction();
-}
-
-void UCWeaponComponent::PlayMontage_Implementation(UAnimMontage* montage)
-{
-	OwnerCharacter->PlayAnimMontage(montage);
 }
 
 

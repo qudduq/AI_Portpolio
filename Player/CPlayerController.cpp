@@ -46,6 +46,7 @@ void ACPlayerController::MoveForward(float Axis)
 	{
 		return;
 	}
+	
 
 	UCStatusComponent* Status = Cast<UCStatusComponent>(CPlayer->GetComponentByClass(UCStatusComponent::StaticClass()));
 	if(Status == nullptr)

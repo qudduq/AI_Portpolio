@@ -65,6 +65,11 @@ private:
 	UFUNCTION(NetMulticast, Reliable)
 		void PlayMontage(UAnimMontage* montage);
 
+	UFUNCTION(Client, Reliable)
+		void ClientPlayMontage(UAnimMontage* Montage);
+
+	UFUNCTION(Reliable, Server)
+		void ServerPlayMontage(UAnimMontage* Montage);
 
 protected:	
 	virtual void BeginPlay() override;
@@ -72,6 +77,12 @@ protected:
 private:
 	UFUNCTION(NetMulticast, Reliable)
 		void ChangeType(EWeaponType InType);
+
+	UFUNCTION(Client, Reliable)
+		void ClientChangeType(EWeaponType InType);
+
+	UFUNCTION(Reliable, Server)
+		void ServerChangeType(EWeaponType InType);
 
 public:
 	FWeaponTypeChanged OnWeaponTypeChanged;
