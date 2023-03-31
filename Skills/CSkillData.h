@@ -25,5 +25,5 @@ public:
 
 private:
 	TArray<UCSkill*> Skills;
-
+	bool bCreate = false;
 };

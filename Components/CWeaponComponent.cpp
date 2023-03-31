@@ -18,23 +18,7 @@ void UCWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(UCWeaponComponent, Type);
-}
-
-
-void UCWeaponComponent::PlayMontage_Implementation(UAnimMontage* montage)
-{
-	OwnerCharacter->PlayAnimMontage(montage);
-}
-
-
-void UCWeaponComponent::ClientPlayMontage_Implementation(UAnimMontage* Montage)
-{
-	ServerPlayMontage(Montage);
-}
-
-void UCWeaponComponent::ServerPlayMontage_Implementation(UAnimMontage* Montage)
-{
-	PlayMontage(Montage);
+	DOREPLIFETIME(UCWeaponComponent, Combo_index);
 }
 
 void UCWeaponComponent::BeginPlay()
@@ -73,13 +57,16 @@ void UCWeaponComponent::BeginPlay()
 			CLog::Log(outStr);
 		}
 	}
-
-	SetIsReplicated(true);
 }
 
-void UCWeaponComponent::ClientChangeType_Implementation(EWeaponType InType)
+void UCWeaponComponent::ChangeComboIndex_Implementation(int comboIndex)
 {
-	ServerChangeType(InType);
+	Combo_index = comboIndex;
+}
+
+void UCWeaponComponent::ServerChangeComboIndex_Implementation(int comboIndex)
+{
+	ChangeComboIndex(comboIndex);
 }
 
 void UCWeaponComponent::ServerChangeType_Implementation(EWeaponType InType)
@@ -90,38 +77,17 @@ void UCWeaponComponent::ServerChangeType_Implementation(EWeaponType InType)
 
 void UCWeaponComponent::SetUnarmedMode() 
 {
-	if (OwnerCharacter->HasAuthority())
-	{
-		ServerChangeType(EWeaponType::Unarmed);
-	}
-	else
-	{
-		ClientChangeType(EWeaponType::Unarmed);
-	}
+	ServerChangeType(EWeaponType::Unarmed);
 }
 
 void UCWeaponComponent::SetOneHandMode()
 {
-	if (OwnerCharacter->HasAuthority())
-	{
-		ServerChangeType(EWeaponType::OneHand);
-	}
-	else
-	{
-		ClientChangeType(EWeaponType::OneHand);
-	}
+	ServerChangeType(EWeaponType::OneHand);
 }
 	
 void UCWeaponComponent::SetBowMode()
 {
-	if (OwnerCharacter->HasAuthority())
-	{
-		ServerChangeType(EWeaponType::Bow);
-	}
-	else
-	{
-		ClientChangeType(EWeaponType::Bow);
-	}
+	ServerChangeType(EWeaponType::Bow);
 }
 
 void UCWeaponComponent::DoAction()
@@ -135,7 +101,7 @@ void UCWeaponComponent::DoAction()
 		FString str = "";
 		str += UEnum::GetValueAsString(Type);
 		str += " Have Not DataAsset";
-		return;
+		ensureMsgf(false, TEXT("'%s'"),*str);
 	}
 
 	if (bAbleNext)
@@ -148,20 +114,13 @@ void UCWeaponComponent::DoAction()
 	Status->Stop();
 	UAnimMontage* montage = DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage;
 
-	if(OwnerCharacter->HasAuthority())
-	{
-		ServerPlayMontage(montage);
-	}
-	else
-	{
-		ClientPlayMontage(montage);
-	}
+	OwnerCharacter->ServerPlayMontage(montage);
 }
 
 
 void UCWeaponComponent::BeginDoAction()
 {
-	Combo_index++;
+	ServerChangeComboIndex(++Combo_index);
 	UAnimMontage* montage = DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage;
 
 	if (montage == nullptr)
@@ -173,14 +132,7 @@ void UCWeaponComponent::BeginDoAction()
 		return;
 	}
 
-	if (OwnerCharacter->HasAuthority())
-	{
-		ServerPlayMontage(montage);
-	}
-	else
-	{
-		ClientPlayMontage(montage);
-	}
+	OwnerCharacter->ServerPlayMontage(montage);
 }
 
 void UCWeaponComponent::EndDoAction()
@@ -189,7 +141,7 @@ void UCWeaponComponent::EndDoAction()
 	Status->Move();
 	DisableNext();
 	OffNextAction();
-	Combo_index = 0;
+	ServerChangeComboIndex(0);
 }
 
 void UCWeaponComponent::ChangeType_Implementation(EWeaponType InType)
@@ -222,18 +174,23 @@ void UCWeaponComponent::SpawnWeapon(EWeaponType weapon)
 	Weapons.Add(weapon, OwnerCharacter->GetWorld()->SpawnActor<ACAttachment>(AttachmentClasses[(int32)weapon], params));
 }
 
-FDamageData UCWeaponComponent::GetDamageData()
+const FDamageData UCWeaponComponent::GetDamageData()
 {
-	FDamageData rtv_DamageData = DataAsset[(int32)Type]->GetActionDatas()[Combo_index].DamageData;
-
-	UCStatusComponent* status = Cast<UCStatusComponent>(OwnerCharacter->GetComponentByClass(UCStatusComponent::StaticClass()));
-	if (status == nullptr) 
+	if(DataAsset[(int32)Type]->GetActionDatas().Num() <= Combo_index)
 	{
-		CLog::Log("Character is have Not StatusComponent");
-		return FDamageData();
+		FString str = "";
+		str += Cast<ACCharacter>(GetOwner())->GetName();
+		str += " ";
+		str += UEnum::GetValueAsString(Type);
+		str += " ";
+		str += FString::FromInt(Combo_index);
+		str += " Have Not DamageData";
+
+		ensureMsgf(false,TEXT("(%s)"),*str);
 	}
 
-	return rtv_DamageData;
+
+	return DataAsset[(int32)Type]->GetActionDatas()[Combo_index].DamageData;
 }
 
 void UCWeaponComponent::HitCancle()

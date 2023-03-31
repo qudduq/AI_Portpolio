@@ -13,7 +13,7 @@ ACAttachment::ACAttachment()
 	Collisions = CreateDefaultSubobject<UCapsuleComponent>("Collisions");
 	Collisions->SetupAttachment(Root);
 }
-
+	
 void ACAttachment::BeginPlay()
 {
 	OwnerCharacter = Cast<ACCharacter>(GetOwner());
@@ -41,19 +41,26 @@ void ACAttachment::OffCollision()
 	Collisions->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-void ACAttachment::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ACAttachment::OnComponentBeginOverlap_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OwnerCharacter == OtherActor) return;
 	if(OwnerCharacter->GetClass() == OtherActor->GetClass()) return;
 
-	CLog::Log(OtherActor->GetName());
 	UCWeaponComponent* weapon = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
 	if (weapon == nullptr) return;
+
+	if(OwnerCharacter->GetController() == nullptr)
+	{
+		FString str = "";
+		str += OwnerCharacter->GetName();
+		str += " Have Not Controller";
+		CLog::Log(str);
+	}
 
 	OtherActor->TakeDamage(0, weapon->GetDamageData(), OwnerCharacter->GetController(), this);
 }
 
-void ACAttachment::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ACAttachment::OnComponentEndOverlap_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (OwnerCharacter == OtherActor) return;
 	if (OwnerCharacter->GetClass() == OtherActor->GetClass()) return;

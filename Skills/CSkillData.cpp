@@ -9,11 +9,17 @@ UCSkillData::UCSkillData()
 
 void UCSkillData::BeginPlay()
 {
+	if(bCreate)
+		return;
+
+	bCreate = true;
 	Skills.Reset();
 	for (const auto& skill : SkillDatas)
 	{
 		Skills.Add(NewObject<UCSkill>(this, skill));
 	}
+
+	CLog::Log("Create SkillDataAsset");
 }
 
 const TArray<UCSkill*>& UCSkillData::GetSkillDatas()

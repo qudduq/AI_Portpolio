@@ -29,7 +29,16 @@ float ACCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AC
 
 	DamageData = (FDamageData*)&DamageEvent;
 
+	if(HasAuthority())
+	{
+		CLog::Print("Server TakeDamage");
+	}
+	else
+	{
+		CLog::Print("Client Take Damage");
+	}
 
+	//TODO : State변경의 의한 델리게이트로 콜이되는것이 아닌 바로 갈수있도록 변경 스테이트는 스테이트만
 	//대미지가 들어온경우
 	State->SetHittedMode();
 	CameraShaking();
@@ -88,8 +97,17 @@ void ACCharacter::Hitted()
 
 void ACCharacter::HitStop(AController* AttackerController)
 {
-	if (DamageData->StopTime == 0)
+	if(AttackerController == nullptr)
+	{
+		CLog::Log("PlayerController is nullptr");
 		return;
+	}
+
+	if (DamageData->StopTime == 0)
+	{
+		CLog::Log("히트스탑 중입니다.");
+		return;
+	}
 
 	AttackerController->GetCharacter()->CustomTimeDilation = 0.01f;
 	CustomTimeDilation = 0.01f;
@@ -122,12 +140,22 @@ void ACCharacter::End_Hitted()
 	State->SetIdleMode();
 }
 
+void ACCharacter::PlayMontage_Implementation(UAnimMontage* montage)
+{
+	PlayAnimMontage(montage);
+}
+
+void ACCharacter::ServerPlayMontage_Implementation(UAnimMontage* Montage)
+{
+	PlayMontage(Montage);
+}
+
 void ACCharacter::Normal_Hit(EDamageType Type)
 {
 	UAnimMontage* montage = HitData->GetHitData(Type).Montage;
 	if (montage == nullptr) return;
 
-	PlayAnimMontage(montage);
+	ServerPlayMontage(montage);
 }
 
 void ACCharacter::Fly_Hit(EDamageType Type)
@@ -135,7 +163,7 @@ void ACCharacter::Fly_Hit(EDamageType Type)
 	UAnimMontage* montage = HitData->GetHitData(Type).Montage;
 	if (montage == nullptr) return;
 
-	PlayAnimMontage(montage);
+	ServerPlayMontage(montage);
 }
 
 

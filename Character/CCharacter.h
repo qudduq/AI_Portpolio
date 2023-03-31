@@ -53,13 +53,21 @@ public:
 	virtual void End_Hitted();
 	virtual void End_Dead() {}
 
+public:
+	UFUNCTION(NetMulticast, Reliable)
+		void PlayMontage(UAnimMontage* montage);
+
+	UFUNCTION(Reliable, Server)
+		void ServerPlayMontage(UAnimMontage* Montage);
+
+
 protected:
 	//Hit Type별 별개 동작
 	virtual void Normal_Hit(EDamageType Type);
 	virtual void Fly_Hit(EDamageType Type);
 
 public:
-	FOnCharacterHit OnCharacterHit;
+	FOnCharacterHit OnCharacterHit;	
 
 private:
 	virtual void OnStateTypeChanged(EStateType Type);

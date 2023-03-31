@@ -36,6 +36,8 @@ private:
 
 public:
 	ACPlayer();
+	virtual void PossessedBy(AController* NewController) override;
+
 	FORCEINLINE UCListView* GetSkillList() const { return SkillList; }
 	FORCEINLINE UCQuickSlotBar_Widget* GetQuickSlotBar() const { return QuickSlotBar; }
 

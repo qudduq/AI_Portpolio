@@ -21,7 +21,7 @@ public:
 		float Pitch;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Replicated, Category = "CharacterMovement")
-		EWeaponType WeaponType = EWeaponType::Max;
+		EWeaponType WeaponType = EWeaponType::Unarmed;
 
 
 public:

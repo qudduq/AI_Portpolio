@@ -54,22 +54,13 @@ public:
 	void OffNextAction();
 
 	void SpawnWeapon(EWeaponType weapon);
-	FDamageData GetDamageData();
+	const FDamageData GetDamageData();
 
 public:
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty > & OutLifetimeProps) const override;
 
 private:
 	void HitCancle();
-
-	UFUNCTION(NetMulticast, Reliable)
-		void PlayMontage(UAnimMontage* montage);
-
-	UFUNCTION(Client, Reliable)
-		void ClientPlayMontage(UAnimMontage* Montage);
-
-	UFUNCTION(Reliable, Server)
-		void ServerPlayMontage(UAnimMontage* Montage);
 
 protected:	
 	virtual void BeginPlay() override;
@@ -78,11 +69,14 @@ private:
 	UFUNCTION(NetMulticast, Reliable)
 		void ChangeType(EWeaponType InType);
 
-	UFUNCTION(Client, Reliable)
-		void ClientChangeType(EWeaponType InType);
-
 	UFUNCTION(Reliable, Server)
 		void ServerChangeType(EWeaponType InType);
+
+	UFUNCTION(NetMulticast, Reliable)
+		void ChangeComboIndex(int comboIndex);
+
+	UFUNCTION(Reliable, Server)
+		void ServerChangeComboIndex(int comboIndex);
 
 public:
 	FWeaponTypeChanged OnWeaponTypeChanged;
@@ -97,7 +91,9 @@ private:
 	UPROPERTY(Replicated)
 		EWeaponType Type = EWeaponType::Max;
 
-	int Combo_index = 0;
+	UPROPERTY(Replicated)
+		int Combo_index = 0;
+
 	bool bNextAction = false;
 	bool bAbleNext = false;
 };

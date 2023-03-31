@@ -36,6 +36,12 @@ ACPlayer::ACPlayer()
 	QuickSlotBarWidget = UCQuickSlotBar_Widget::StaticClass();
 }
 
+void ACPlayer::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+}
+
 void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
