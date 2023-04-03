@@ -178,23 +178,28 @@ void ACPlayerController::ChangeWeapon()
 	{
 		return;
 	}
-
-	switch (weaponnum)
-	{
-	case 0: Weapon->SetUnarmedMode();
-		break;
-	case 1: Weapon->SetOneHandMode();
-		break;
-	case 2: Weapon->SetBowMode();
-		break;
-	}
-
 	UCSkillComponent* Skill = Cast<UCSkillComponent>(CPlayer->GetComponentByClass(UCSkillComponent::StaticClass()));
-	if(Skill == nullptr)
+	if (Skill == nullptr)
 	{
 		return;
 	}
-	CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData());
+	
+	switch (weaponnum)
+	{
+	case 0: 
+		Weapon->SetUnarmedMode();
+		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData(EWeaponType::Unarmed));
+		break;
+	case 1: 
+		Weapon->SetOneHandMode();
+		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData(EWeaponType::OneHand));
+		break;
+	case 2: 
+		Weapon->SetBowMode();
+		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData(EWeaponType::Bow));
+		break;
+	}
+
 	isChanging = false;
 }
 

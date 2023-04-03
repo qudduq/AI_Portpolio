@@ -4,6 +4,8 @@
 #include "Skills/CSkill.h"
 #include "Animation/AnimMontage.h"
 #include "CStateComponent.h"
+#include "Character/CCharacter.h"
+#include "Net/UnrealNetwork.h"
 #include "Skills/UCSkillStructure.h"
 #include "Utillities/CLog.h"
 
@@ -14,16 +16,18 @@ UCSkillComponent::UCSkillComponent()
 	
 }
 
+void UCSkillComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UCSkillComponent, SkillDataAssets);
+}
 
 void UCSkillComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OwnerCharacter = Cast<ACharacter>(GetOwner());
-
-	Weapon = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
-
-	Weapon->OnWeaponTypeChanged.Add(FWeaponTypeChanged::FDelegate::CreateUObject(this,&UCSkillComponent::OnWeaponTypeChanged));
+	ACCharacter* OwnerCharacter = Cast<ACCharacter>(GetOwner());
 
 	for (int32 i = 0; i < (int32)EWeaponType::Max; i++)
 	{
@@ -38,11 +42,13 @@ void UCSkillComponent::BeginPlay()
 		else
 			SkillDataAssets[i]->BeginPlay();
 	}
+
+	CLog::Log("");
 }
 
-const TArray<UCSkill*>& UCSkillComponent::GetSkillData()
+const TArray<UCSkill*>& UCSkillComponent::GetSkillData(EWeaponType WeaponType)
 {
-	return Data->GetSkillDatas();
+	return SkillDataAssets[static_cast<int32>(WeaponType)]->GetSkillDatas();
 }
 
 void UCSkillComponent::BeginSkill()
@@ -59,12 +65,6 @@ void UCSkillComponent::EndSkill()
 	{
 		OnEndSkill.Broadcast();
 	}
-}
-
-void UCSkillComponent::OnWeaponTypeChanged(EWeaponType InNewType)
-{
-	WeaponType = InNewType;
-	Data = (SkillDataAssets[(int32)WeaponType]);
 }
 
 

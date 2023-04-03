@@ -6,6 +6,9 @@
 #include "Components/ListView.h"
 #include "CDragWidget.h"
 #include "CWidgetDrag.h"
+#include "Net/UnrealNetwork.h"
+#include "Skills/CSkill.h"
+#include  "Widget/QuickSlotInterface.h"
 
 void UCListView::SetSKills(const TArray<UCSkill*>& SkillDatas)
 {
@@ -21,6 +24,7 @@ void UCListView::CCloseSkills()
 {
 	SetVisibility(ESlateVisibility::Hidden);
 }
+
 
 
 

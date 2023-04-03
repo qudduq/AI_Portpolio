@@ -90,7 +90,7 @@ void UCWeaponComponent::SetBowMode()
 	ServerChangeType(EWeaponType::Bow);
 }
 
-void UCWeaponComponent::DoAction()
+void UCWeaponComponent::DoAction_Implementation()
 {
 	if (Type == EWeaponType::Unarmed)
 		return;
@@ -118,7 +118,7 @@ void UCWeaponComponent::DoAction()
 }
 
 
-void UCWeaponComponent::BeginDoAction()
+void UCWeaponComponent::BeginDoAction_Implementation()
 {
 	ServerChangeComboIndex(++Combo_index);
 	UAnimMontage* montage = DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage;
@@ -135,7 +135,7 @@ void UCWeaponComponent::BeginDoAction()
 	OwnerCharacter->ServerPlayMontage(montage);
 }
 
-void UCWeaponComponent::EndDoAction()
+void UCWeaponComponent::EndDoAction_Implementation()
 {
 	State->SetIdleMode();
 	Status->Move();

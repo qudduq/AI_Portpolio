@@ -43,10 +43,14 @@ public:
 public:	
 	UCWeaponComponent();
 
-	void DoAction();
+	UFUNCTION(Reliable, Server)
+		void DoAction();
 
-	void BeginDoAction();
-	void EndDoAction();
+	UFUNCTION(Reliable, Server)
+		void BeginDoAction();
+
+	UFUNCTION(Reliable, Server)
+		void EndDoAction();
 
 	void EnableNext();
 	void DisableNext();
@@ -55,6 +59,7 @@ public:
 
 	void SpawnWeapon(EWeaponType weapon);
 	const FDamageData GetDamageData();
+	FORCEINLINE EWeaponType GetWeaponType() { return Type; }
 
 public:
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty > & OutLifetimeProps) const override;
@@ -89,7 +94,7 @@ private:
 	TMap<EWeaponType, class ACAttachment*> Weapons;
 
 	UPROPERTY(Replicated)
-		EWeaponType Type = EWeaponType::Max;
+		EWeaponType Type = EWeaponType::Unarmed;
 
 	UPROPERTY(Replicated)
 		int Combo_index = 0;

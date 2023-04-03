@@ -68,12 +68,22 @@ UCSkill* UCBTTaskNode_Skill::ChoiceSkill(ACCharacter* OwnerCharacter)
 	UCSkillComponent* skillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
 	if (skillComponent == nullptr)
 	{
-		CLog::Log("Enemy Not SkillComponent");
+		FString str = OwnerCharacter->GetName();
+		str += " Not SkillComponent";
+		CLog::Log(str);
 		return nullptr;
 	}
 
+	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	if(WeaponComponent == nullptr)
+	{
+		FString str = OwnerCharacter->GetName();
+		str += " Not WeaponComponent";
+		CLog::Log(str);
+	}
+
 	TArray<UCSkill*> skills;
-	for (auto & skill : skillComponent->GetSkillData())
+	for (const auto & skill : skillComponent->GetSkillData(WeaponComponent->GetWeaponType()))
 	{
 		if (skill->GetSkillDistance() == SkillDistance)
 		{

@@ -15,38 +15,23 @@ class AI_PORTPOLIO_API UCSkillComponent : public UActorComponent
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Replicated)
 		class UCSkillData* SkillDataAssets[(int32)EWeaponType::Max];
 
 public:	
 	UCSkillComponent();
 
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty > & OutLifetimeProps) const override;
 protected:
 	virtual void BeginPlay() override;
 
 public:	
-	const TArray<UCSkill*>& GetSkillData();
+	const TArray<UCSkill*>& GetSkillData(EWeaponType WeaponType);
 	void BeginSkill();
 	void EndSkill();
-
-private:
-	UFUNCTION()
-		void OnWeaponTypeChanged(EWeaponType InNewType);
 
 public:
 	FOnBeginSkill OnBeginSkill;
 	FOnEndSkill OnEndSkill;
-
-private:
-	UPROPERTY()
-		class ACharacter* OwnerCharacter;
-
-	UPROPERTY()
-		class UCSkillData* Data;
-
-	UPROPERTY()
-		UCWeaponComponent* Weapon;
-
-	EWeaponType WeaponType = EWeaponType::Unarmed;
 
 };

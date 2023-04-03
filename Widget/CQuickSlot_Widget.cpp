@@ -1,10 +1,8 @@
 #include "CQuickSlot_Widget.h"
 #include "Utillities/CLog.h"
 #include "CWidgetDrag.h"
-#include "Skills/CSkill.h"
 #include "Components/Image.h"
 #include "Components/CQuickSlotComponent.h"
-#include "Components/CSkillComponent.h"
 #include "GameFramework/Character.h"
 #include "Widget/QuickSlotInterface.h"
 
@@ -28,7 +26,14 @@ bool UCQuickSlot_Widget::NativeOnDrop(const FGeometry& InGeometry, const FDragDr
 	QuickSlotComponent->SetQuickSlot(SlotName, slotdata);
 
 	//마지막으로 보여질 텍스쳐까지 세팅해줍니다.
-	SetSkill->SetBrushFromTexture(slotdata->GetSlotTexture());
+	UTexture2D* Texture = slotdata->GetSlotTexture();
+	if(Texture == nullptr)
+	{
+		CLog::Log("Skill Have Not Texture");
+		return false;
+	}
+
+	SetSkill->SetBrushFromTexture(Texture);
 
 	return false;
 }

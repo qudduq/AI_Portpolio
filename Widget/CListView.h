@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Skills/CSkill.h"
 #include "CListView.generated.h"
 
 /*
@@ -27,9 +26,7 @@ private:
 		class UListView* SkillList;
 
 public:
-	void SetSKills(const TArray<UCSkill*>& SkillDatas);
+	void SetSKills(const TArray<class UCSkill*>& SkillDatas);
 	void COpenSkills();
 	void CCloseSkills();
-
-
 };

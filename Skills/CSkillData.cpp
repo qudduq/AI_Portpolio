@@ -9,10 +9,6 @@ UCSkillData::UCSkillData()
 
 void UCSkillData::BeginPlay()
 {
-	if(bCreate)
-		return;
-
-	bCreate = true;
 	Skills.Reset();
 	for (const auto& skill : SkillDatas)
 	{

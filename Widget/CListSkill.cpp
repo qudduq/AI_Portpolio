@@ -8,13 +8,15 @@
 #include "CWidgetDrag.h"
 #include "Components/SizeBox.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Net/UnrealNetwork.h"
 
 
 void UCListSkill::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
 	skill = Cast<UCSkill>(ListItemObject);
-	if (skill == NULL) return;
+	if (skill == nullptr)
+		return;
+
 	texture = skill->GetSlotTexture();
 	SkillImage->SetBrushFromTexture(texture);
 }
@@ -64,6 +66,14 @@ void UCListSkill::NativeOnDragDetected(const FGeometry& InGeometry, const FPoint
 	dragdrop->Payload = skill; // 가장 주요한 해당 스킬데이터를 넘겨줍니다.
 
 	OutOperation = dragdrop;
+}
+
+void UCListSkill::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UCListSkill, skill);
+	DOREPLIFETIME(UCListSkill, texture);
 }
 
 

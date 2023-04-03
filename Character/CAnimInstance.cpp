@@ -1,18 +1,19 @@
 #include "CAnimInstance.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
+#include "Utillities/CLog.h"
 
 void UCAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
-	if (OwnerCharacter == NULL)
+	if (OwnerCharacter == nullptr)
 		return;
 
 	Weapon = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
 
-	if (!!Weapon)
+	if (Weapon != nullptr)
 		Weapon->OnWeaponTypeChanged.Add(FWeaponTypeChanged::FDelegate::CreateUObject(this,&UCAnimInstance::OnWeaponTypeChanged));
 
 }
@@ -20,7 +21,7 @@ void UCAnimInstance::NativeBeginPlay()
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);	
-	if (OwnerCharacter == NULL)
+	if (OwnerCharacter == nullptr)
 		return;
 
 	Speed = OwnerCharacter->GetVelocity().Size2D();

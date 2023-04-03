@@ -31,8 +31,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty > & OutLifetimeProps) const override;
 
 private:
-	UFUNCTION()
-		void OnWeaponTypeChanged(EWeaponType InNewType);
+	void OnWeaponTypeChanged(EWeaponType InNewType);
 
 private:
 	class ACharacter* OwnerCharacter;

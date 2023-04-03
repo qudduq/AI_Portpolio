@@ -38,11 +38,13 @@ public:
 	FORCEINLINE FVector2D GetImageSize() { return SkillImage->GetDesiredSize(); }
 	UTexture2D* GetImage() { return texture; }
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 private:
-	UPROPERTY()
+	UPROPERTY(Replicated)
 		class UCSkill* skill;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 		UTexture2D* texture;
 
 	FTimerHandle handle;

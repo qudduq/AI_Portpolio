@@ -20,7 +20,7 @@ void UCSkill::ExcuteSkill(ACharacter* InOwner)
 	EndHandle = SkillComponent->OnEndSkill.Add(FOnEndSkill::FDelegate::CreateUObject(this, &UCSkill::EndSkill));
 
 	State->SetActionMode();
-	InOwner->PlayAnimMontage(SkillData.Montage, SkillData.PlayRatio);
+	OwnerCharacter->ServerPlayMontage(SkillData.Montage);
 }
 
 void UCSkill::EndSkill()
@@ -39,7 +39,7 @@ void UCSkill::QuickSlotCall(ACharacter* InOwner)
 
 UTexture2D* UCSkill::GetSlotTexture()
 {
-	if(Texture == nullptr)
+	if (Texture == nullptr)
 	{
 		FString str = "";
 		this->GetName(str);
