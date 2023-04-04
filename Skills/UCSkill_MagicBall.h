@@ -16,11 +16,17 @@ private:
 	UPROPERTY(EditAnywhere)
 		FName SocketName;
 
+	UPROPERTY(EditAnywhere)
+		float Radius = 10.0f;
+
+
 public:
 	virtual void ExcuteSkill(class ACharacter* InOwner) override;
 	virtual void BeginSkill() override;
 
 private:
+	FVector GetEnemyLocation(class ACharacter* InOwner) const;
+
+private:
 	class ABezierShooter* Shooter;
-	FVector EnemyLocation;
 };

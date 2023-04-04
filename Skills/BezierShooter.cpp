@@ -17,7 +17,7 @@ ABezierShooter::ABezierShooter()
 void ABezierShooter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SetLifeSpan(5);
 	
 }
 

@@ -18,7 +18,7 @@ void ACAttachment::BeginPlay()
 {
 	OwnerCharacter = Cast<ACCharacter>(GetOwner());
 
-	Collisions->OnComponentBeginOverlap.AddDynamic(this, &ACAttachment::OnComponentBeginOverlap);
+	Collisions->OnComponentBeginOverlap.AddDynamic(this,&ACAttachment::OnComponentBeginOverlap);
 	Collisions->OnComponentEndOverlap.AddDynamic(this, &ACAttachment::OnComponentEndOverlap);
 
 	Super::BeginPlay();

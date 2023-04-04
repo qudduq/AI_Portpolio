@@ -4,8 +4,6 @@
 #include "GameFramework/Actor.h"
 #include "CAttachment.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentOverlap, class ACharacter*, InAttacker, class AActor*, InAttackCauser, class ACharacter*, InOtherCharacter);
-
 UCLASS()
 class AI_PORTPOLIO_API ACAttachment : public AActor
 {
@@ -37,10 +35,6 @@ private:
 
 	UFUNCTION(Reliable, Server)
 		void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-public:
-	FAttachmentOverlap OnAttachmentBeginOverlap;
-	FAttachmentOverlap OnAttachmentEndOverlap;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
