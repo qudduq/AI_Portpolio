@@ -12,13 +12,11 @@ void UUCSkill_MagicBall::ExcuteSkill(ACharacter* InOwner)
 	Super::ExcuteSkill(InOwner);
 
 	// Object »õ¼º
-	{
-		FActorSpawnParameters params;
-		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	FActorSpawnParameters params;
+	params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-		FVector Location = InOwner->GetMesh()->GetSocketLocation(SocketName);
-		Shooter = InOwner->GetWorld()->SpawnActor<ABezierShooter>(ShooterClass, Location, FRotator::ZeroRotator, params);
-	}
+	FVector Location = OwnerCharacter->GetMesh()->GetSocketLocation(SocketName);
+	Shooter = OwnerCharacter->GetWorld()->SpawnActor<ABezierShooter>(ShooterClass, Location, FRotator::ZeroRotator, params);
 }
 
 void UUCSkill_MagicBall::BeginSkill()
@@ -36,7 +34,7 @@ FVector UUCSkill_MagicBall::GetEnemyLocation(ACharacter* InOwner) const
 	ignoreActors.Add(InOwner);
 
 	TArray<FHitResult> hitResults;
-
+	
 	UKismetSystemLibrary::SphereTraceMultiByProfile
 	(
 		InOwner->GetWorld(),
@@ -46,7 +44,7 @@ FVector UUCSkill_MagicBall::GetEnemyLocation(ACharacter* InOwner) const
 		"Enemy",
 		false,
 		ignoreActors,
-		EDrawDebugTrace::ForDuration,
+		EDrawDebugTrace::None,
 		hitResults,
 		true
 	);

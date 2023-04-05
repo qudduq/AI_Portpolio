@@ -11,6 +11,7 @@
 #include "Widget/CQuickSlotBar_Widget.h"
 #include "Engine/StreamableManager.h"
 #include "Components/CQuickSlotComponent.h"
+#include "Components/CSkillComponent.h"
 
 
 ACPlayer::ACPlayer()
@@ -57,6 +58,7 @@ void ACPlayer::BeginPlay()
 
 	SkillList->CCloseSkills();
 	Weapon->SetUnarmedMode();
+	SkillList->SetSKills(Skill->GetSkillData(EWeaponType::Unarmed));
 }
 
 

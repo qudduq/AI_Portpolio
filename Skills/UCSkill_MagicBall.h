@@ -4,6 +4,8 @@
 #include "Skills/CSkill.h"
 #include "UCSkill_MagicBall.generated.h"
 
+class ABezierShooter;
+
 UCLASS()
 class AI_PORTPOLIO_API UUCSkill_MagicBall : public UCSkill
 {
@@ -11,7 +13,7 @@ class AI_PORTPOLIO_API UUCSkill_MagicBall : public UCSkill
 
 private:
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<class ABezierShooter> ShooterClass;
+		TSubclassOf<ABezierShooter> ShooterClass;
 
 	UPROPERTY(EditAnywhere)
 		FName SocketName;
@@ -28,5 +30,5 @@ private:
 	FVector GetEnemyLocation(class ACharacter* InOwner) const;
 
 private:
-	class ABezierShooter* Shooter;
+	ABezierShooter* Shooter;
 };

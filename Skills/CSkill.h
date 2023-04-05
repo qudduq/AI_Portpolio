@@ -22,7 +22,7 @@ protected:
 
 public:
 	virtual void ExcuteSkill(class ACharacter* InOwner);
-	virtual void BeginSkill() {}
+	virtual void BeginSkill() {};
 	virtual void EndSkill();
 
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }

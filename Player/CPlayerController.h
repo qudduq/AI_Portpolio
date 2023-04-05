@@ -33,7 +33,14 @@ private:
 	void ChangeWeapon();
 	void MouseView();
 	void DoAction();
-	void QuickSlot(const FKey SetNum);
+
+
+	UFUNCTION(NetMulticast, Reliable)
+		void QuickSlot(const FKey SetNum);
+
+	UFUNCTION(Reliable, Server)
+		void ServerQuickSlotCall(const FKey SetNum);
+
 	void CLickSkillList();
 
 private:

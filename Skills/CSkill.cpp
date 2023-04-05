@@ -32,6 +32,7 @@ void UCSkill::EndSkill()
 	OwnerCharacter->OnCharacterHit.Remove(HitCancleHandle);
 }
 
+
 void UCSkill::QuickSlotCall(ACharacter* InOwner)
 {
 	ExcuteSkill(InOwner);

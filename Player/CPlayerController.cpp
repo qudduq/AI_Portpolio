@@ -30,7 +30,7 @@ void ACPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ACPlayerController::Jump);
 
 	//Key값이 추가로 입력되고있음
-	InputComponent->BindAction("QuickSlot", IE_Pressed, this, &ACPlayerController::QuickSlot);
+	InputComponent->BindAction("QuickSlot", IE_Pressed, this, &ACPlayerController::ServerQuickSlotCall);
 }
 
 void ACPlayerController::OnPossess(APawn* aPawn)
@@ -236,7 +236,7 @@ void ACPlayerController::DoAction()
 	Weapon->DoAction();
 }
 
-void ACPlayerController::QuickSlot(const FKey SetNum)
+void ACPlayerController::QuickSlot_Implementation(const FKey SetNum)
 {
 	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
 	if (CPlayer == nullptr)
@@ -254,7 +254,31 @@ void ACPlayerController::QuickSlot(const FKey SetNum)
 	{
 		return;
 	}
+
+	if(HasAuthority())
+	{
+		CLog::Print("Server QuickSLotCall");
+	}
+	else
+	{
+		CLog::Print("Client QuickSlotCall");
+	}
+
 	QuickSlot->QuickSlotCall(SetNum);
+}
+
+void ACPlayerController::ServerQuickSlotCall_Implementation(const FKey SetNum)
+{
+	if(HasAuthority())
+	{
+		CLog::Print("Server QuickCalss Start");
+	}
+	else
+	{
+		CLog::Print("Client QuickSlot Cass Start");
+	}
+
+	QuickSlot(SetNum);
 }
 
 void ACPlayerController::CLickSkillList()

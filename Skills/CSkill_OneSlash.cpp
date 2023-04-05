@@ -3,12 +3,20 @@
 #include "GameFramework/Character.h"
 #include "Utillities/CLog.h"
 #include "Components/CapsuleComponent.h"
+#include "Character/CCharacter.h"
 
 void UCSkill_OneSlash::BeginSkill()
 {
 	Super::BeginSkill();
 
-	CLog::Log("BeginSkill");
+	if(OwnerCharacter->HasAuthority())
+	{
+		CLog::Print("Server BeginSkill");
+	}
+	else
+	{
+		CLog::Print("Client BeginSkill");
+	}
 	OwnerCharacter->GetCapsuleComponent()->SetCollisionProfileName(L"SkillOverlap");
 }
 

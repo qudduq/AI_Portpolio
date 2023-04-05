@@ -29,16 +29,6 @@ float ACCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AC
 
 	DamageData = (FDamageData*)&DamageEvent;
 
-	if(HasAuthority())
-	{
-		CLog::Print("Server TakeDamage");
-	}
-	else
-	{
-		CLog::Print("Client Take Damage");
-	}
-
-	//TODO : State변경의 의한 델리게이트로 콜이되는것이 아닌 바로 갈수있도록 변경 스테이트는 스테이트만
 	//대미지가 들어온경우
 	State->SetHittedMode();
 	CameraShaking();

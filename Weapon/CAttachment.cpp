@@ -28,6 +28,11 @@ void ACAttachment::BeginPlay()
 
 void ACAttachment::AttachTo(FName InSocketName)
 {
+	if(OwnerCharacter == nullptr)
+	{
+		return;
+	}
+
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
 }
 
