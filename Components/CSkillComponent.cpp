@@ -8,6 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Skills/UCSkillStructure.h"
 #include "Utillities/CLog.h"
+#include "Components/CWeaponComponent.h"
 
 
 
@@ -46,9 +47,14 @@ void UCSkillComponent::BeginPlay()
 	CLog::Log("");
 }
 
-const TArray<UCSkill*>& UCSkillComponent::GetSkillData(EWeaponType WeaponType)
+const  TMap<FName, UCSkill*>& UCSkillComponent::GetSkillMapData(EWeaponType WeaponType)
 {
-	return SkillDataAssets[static_cast<int32>(WeaponType)]->GetSkillDatas();
+	return SkillDataAssets[static_cast<int32>(WeaponType)]->GetSkillMapDatas();
+}
+
+const TArray<UCSkill*>& UCSkillComponent::GetSkillArrayData(EWeaponType WeaponType)
+{
+	return SkillDataAssets[static_cast<int32>(WeaponType)]->GetSkillArrayDatas();
 }
 
 void UCSkillComponent::BeginSkill()
@@ -65,6 +71,30 @@ void UCSkillComponent::EndSkill()
 	{
 		OnEndSkill.Broadcast();
 	}
+}
+
+void UCSkillComponent::ExcuteSkill(FName SkillID)
+{
+	ACCharacter* OwnerCharacter = Cast<ACCharacter>(GetOwner());
+	if (OwnerCharacter == nullptr)
+	{
+		return;
+	}
+
+	UCWeaponComponent* weaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	if (weaponComponent == nullptr)
+	{
+		return;
+	}
+
+
+	UCSkill* const* skill = GetSkillMapData(weaponComponent->GetWeaponType()).Find(SkillID);
+	if (skill == nullptr)
+	{
+		return;
+	}
+
+	(*skill)->ExcuteSkill(OwnerCharacter);
 }
 
 

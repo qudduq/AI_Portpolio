@@ -188,15 +188,15 @@ void ACPlayerController::ChangeWeapon()
 	{
 	case 0: 
 		Weapon->SetUnarmedMode();
-		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData(EWeaponType::Unarmed));
+		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillArrayData(EWeaponType::Unarmed));
 		break;
 	case 1: 
 		Weapon->SetOneHandMode();
-		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData(EWeaponType::OneHand));
+		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillArrayData(EWeaponType::OneHand));
 		break;
 	case 2: 
 		Weapon->SetBowMode();
-		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillData(EWeaponType::Bow));
+		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillArrayData(EWeaponType::Bow));
 		break;
 	}
 
@@ -255,29 +255,11 @@ void ACPlayerController::QuickSlot_Implementation(const FKey SetNum)
 		return;
 	}
 
-	if(HasAuthority())
-	{
-		CLog::Print("Server QuickSLotCall");
-	}
-	else
-	{
-		CLog::Print("Client QuickSlotCall");
-	}
-
 	QuickSlot->QuickSlotCall(SetNum);
 }
 
 void ACPlayerController::ServerQuickSlotCall_Implementation(const FKey SetNum)
 {
-	if(HasAuthority())
-	{
-		CLog::Print("Server QuickCalss Start");
-	}
-	else
-	{
-		CLog::Print("Client QuickSlot Cass Start");
-	}
-
 	QuickSlot(SetNum);
 }
 

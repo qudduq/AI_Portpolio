@@ -21,9 +21,11 @@ public:
 
 	void BeginPlay();
 
-	const TArray<UCSkill*>& GetSkillDatas();
+	const TMap<FName, UCSkill*>& GetSkillMapDatas();
+	const TArray<UCSkill*>& GetSkillArrayDatas();
 
 private:
-	TArray<UCSkill*> Skills;
+	TArray<UCSkill*> SkillsArray;
+	TMap<FName,UCSkill*> SkillsMap;
 	bool bCreate = false;
 };

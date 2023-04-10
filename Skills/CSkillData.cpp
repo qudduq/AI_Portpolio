@@ -9,18 +9,30 @@ UCSkillData::UCSkillData()
 
 void UCSkillData::BeginPlay()
 {
-	Skills.Reset();
+	SkillsArray.Reset();
+	SkillsMap.Reset();
+
 	for (const auto& skill : SkillDatas)
 	{
-		Skills.Add(NewObject<UCSkill>(this, skill));
+		UCSkill* createSkill = NewObject<UCSkill>(this,skill);
+		if(SkillsMap.Find(createSkill->GetID()) == nullptr)
+		{
+			SkillsMap.Add(createSkill->GetID(), createSkill);
+			SkillsArray.Add(createSkill);
+		}
 	}
 
 	CLog::Log("Create SkillDataAsset");
 }
 
-const TArray<UCSkill*>& UCSkillData::GetSkillDatas()
+const TArray<UCSkill*>& UCSkillData::GetSkillArrayDatas()
 {
-	return Skills;
+	return SkillsArray;
+}
+
+const TMap<FName, UCSkill*>& UCSkillData::GetSkillMapDatas()
+{
+	return SkillsMap;
 }
 
 

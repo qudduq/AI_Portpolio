@@ -26,9 +26,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	const TArray<UCSkill*>& GetSkillData(EWeaponType WeaponType);
+	const  TMap<FName, UCSkill*>& GetSkillMapData(EWeaponType WeaponType);
+	const TArray<UCSkill*>& GetSkillArrayData(EWeaponType WeaponType);
 	void BeginSkill();
 	void EndSkill();
+
+public:
+	void ExcuteSkill(FName SkillID);
 
 public:
 	FOnBeginSkill OnBeginSkill;

@@ -15,9 +15,7 @@ class AI_PORTPOLIO_API IQuickSlotInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION()
-		virtual void QuickSlotCall(class ACharacter* InOwner) = 0;
-
-	UFUNCTION()
-		virtual UTexture2D* GetSlotTexture() = 0;
+	virtual void QuickSlotCall(class ACharacter* InOwner) = 0;
+	virtual UTexture2D* GetSlotTexture() = 0;
+	virtual FName GetID() = 0;
 };

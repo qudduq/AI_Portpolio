@@ -9,14 +9,6 @@ void UCSkill_OneSlash::BeginSkill()
 {
 	Super::BeginSkill();
 
-	if(OwnerCharacter->HasAuthority())
-	{
-		CLog::Print("Server BeginSkill");
-	}
-	else
-	{
-		CLog::Print("Client BeginSkill");
-	}
 	OwnerCharacter->GetCapsuleComponent()->SetCollisionProfileName(L"SkillOverlap");
 }
 

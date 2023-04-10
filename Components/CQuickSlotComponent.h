@@ -23,5 +23,6 @@ public:
 private:
 	UPROPERTY()
 		class ACharacter* OwnerCharacter;
-	TMap<FKey, class IQuickSlotInterface*> QuickSlotData;
+
+		TMap<FKey, class IQuickSlotInterface*> QuickSlotData;
 };

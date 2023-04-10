@@ -41,6 +41,9 @@ public:
 	FORCEINLINE UCListView* GetSkillList() const { return SkillList; }
 	FORCEINLINE UCQuickSlotBar_Widget* GetQuickSlotBar() const { return QuickSlotBar; }
 
+	UFUNCTION(Client, Reliable)
+		void GetCharacterName();
+
 protected:
 	virtual void BeginPlay() override;	
 

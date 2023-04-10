@@ -83,7 +83,7 @@ UCSkill* UCBTTaskNode_Skill::ChoiceSkill(ACCharacter* OwnerCharacter)
 	}
 
 	TArray<UCSkill*> skills;
-	for (const auto & skill : skillComponent->GetSkillData(WeaponComponent->GetWeaponType()))
+	for (const auto & skill : skillComponent->GetSkillArrayData(WeaponComponent->GetWeaponType()))
 	{
 		if (skill->GetSkillDistance() == SkillDistance)
 		{

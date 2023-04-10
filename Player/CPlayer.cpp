@@ -43,6 +43,24 @@ void ACPlayer::PossessedBy(AController* NewController)
 	
 }
 
+void ACPlayer::GetCharacterName_Implementation()
+{
+	if (HasAuthority())
+	{
+		FString str = "";
+		str += "Current Controller Character Name : ";
+		str += GetName();
+		CLog::Print(str);
+	}
+	else
+	{
+		FString str = "";
+		str += "Copy Character Name : ";
+		str += GetName();  
+		CLog::Print(str);
+	}
+}
+
 void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
@@ -58,7 +76,11 @@ void ACPlayer::BeginPlay()
 
 	SkillList->CCloseSkills();
 	Weapon->SetUnarmedMode();
-	SkillList->SetSKills(Skill->GetSkillData(EWeaponType::Unarmed));
+
+	SkillList->SetSKills(Skill->GetSkillArrayData(EWeaponType::Unarmed));
+
+	GetCharacterName();
+	
 }
 
 

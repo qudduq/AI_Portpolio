@@ -20,16 +20,21 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UTexture2D* Texture;
 
+	UPROPERTY(EditAnywhere)
+		FName SkillID;
+
 public:
 	virtual void ExcuteSkill(class ACharacter* InOwner);
-	virtual void BeginSkill() {};
+	virtual void BeginSkill() {}
 	virtual void EndSkill();
 
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }
+	
 
 public:
 	virtual void QuickSlotCall(class ACharacter* InOwner) override;
 	virtual UTexture2D* GetSlotTexture() override;
+	virtual FName GetID() override;
 
 private:
 	void HitCancle();

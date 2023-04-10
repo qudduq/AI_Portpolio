@@ -51,6 +51,11 @@ UTexture2D* UCSkill::GetSlotTexture()
 	return Texture;
 }
 
+FName UCSkill::GetID()
+{
+	return SkillID;
+}
+
 void UCSkill::HitCancle()
 {
 	CLog::Log("HitCancle");
