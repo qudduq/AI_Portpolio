@@ -16,6 +16,7 @@ public class AI_Portpolio : ModuleRules
 			"InputCore",
 			"Landscape",
 			"UMG",
+			"Niagara",
 			"Slate",
 			"SlateCore",
 			"AIModule",

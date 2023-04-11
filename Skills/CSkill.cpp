@@ -20,7 +20,7 @@ void UCSkill::ExcuteSkill(ACharacter* InOwner)
 	EndHandle = SkillComponent->OnEndSkill.Add(FOnEndSkill::FDelegate::CreateUObject(this, &UCSkill::EndSkill));
 
 	State->SetActionMode();
-	OwnerCharacter->ServerPlayMontage(SkillData.Montage);
+	OwnerCharacter->MultiCastPlayMontage(SkillData.Montage);
 }
 
 void UCSkill::EndSkill()

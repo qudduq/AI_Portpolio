@@ -73,7 +73,12 @@ void UCSkillComponent::EndSkill()
 	}
 }
 
-void UCSkillComponent::ExcuteSkill(FName SkillID)
+bool UCSkillComponent::ExcuteSkill_Validate(FName SkillID)
+{
+	return true;
+}
+
+void UCSkillComponent::ExcuteSkill_Implementation(FName SkillID)
 {
 	ACCharacter* OwnerCharacter = Cast<ACCharacter>(GetOwner());
 	if (OwnerCharacter == nullptr)

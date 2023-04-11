@@ -130,14 +130,14 @@ void ACCharacter::End_Hitted()
 	State->SetIdleMode();
 }
 
-void ACCharacter::PlayMontage_Implementation(UAnimMontage* montage)
+void ACCharacter::MultiCastPlayMontage_Implementation(UAnimMontage* montage)
 {
 	PlayAnimMontage(montage);
 }
 
 void ACCharacter::ServerPlayMontage_Implementation(UAnimMontage* Montage)
 {
-	PlayMontage(Montage);
+	MultiCastPlayMontage(Montage);
 }
 
 void ACCharacter::Normal_Hit(EDamageType Type)

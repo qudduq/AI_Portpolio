@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "Skills/CSkill.h"
-#include "UCSkill_MagicBall.generated.h"
+#include "CSkill_MagicBall.generated.h"
 
 class ABezierShooter;
 
 UCLASS()
-class AI_PORTPOLIO_API UUCSkill_MagicBall : public UCSkill
+class AI_PORTPOLIO_API UCSkill_MagicBall : public UCSkill
 {
 	GENERATED_BODY()
 
@@ -28,7 +28,7 @@ public:
 
 private:
 	FVector GetEnemyLocation(class ACharacter* InOwner) const;
-
+	
 private:
 	ABezierShooter* Shooter;
 };

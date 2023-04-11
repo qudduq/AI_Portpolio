@@ -32,7 +32,8 @@ public:
 	void EndSkill();
 
 public:
-	void ExcuteSkill(FName SkillID);
+	UFUNCTION(Reliable, Server, WithValidation)
+		void ExcuteSkill(FName SkillID);
 
 public:
 	FOnBeginSkill OnBeginSkill;

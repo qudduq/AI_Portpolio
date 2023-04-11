@@ -79,7 +79,7 @@ void ACPlayer::BeginPlay()
 
 	SkillList->SetSKills(Skill->GetSkillArrayData(EWeaponType::Unarmed));
 
-	GetCharacterName();
+	//GetCharacterName();
 	
 }
 

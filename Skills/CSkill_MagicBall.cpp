@@ -1,4 +1,4 @@
-#include "UCSkill_MagicBall.h"
+#include "CSkill_MagicBall.h"
 
 #include "BezierShooter.h"
 #include "Character/CCharacter.h"
@@ -6,27 +6,30 @@
 #include "GameFramework/Character.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Utillities/CLog.h"
+#include "Particles/ParticleSystemComponent.h"
 
-void UUCSkill_MagicBall::ExcuteSkill(ACharacter* InOwner)
+void UCSkill_MagicBall::ExcuteSkill(ACharacter* InOwner)
 {
 	Super::ExcuteSkill(InOwner);
 
 	// Object »õ¼º
-	FActorSpawnParameters params;
-	params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	FVector Location = OwnerCharacter->GetMesh()->GetSocketLocation(SocketName);
-	Shooter = OwnerCharacter->GetWorld()->SpawnActor<ABezierShooter>(ShooterClass, Location, FRotator::ZeroRotator, params);
+	FTransform transform;
+	transform.SetLocation(Location);
+	Shooter = OwnerCharacter->GetWorld()->SpawnActorDeferred<ABezierShooter>(ShooterClass, transform, InOwner);
+	Shooter->SetParticle(SkillData.Effect);
+	Shooter->FinishSpawning(transform);
 }
 
-void UUCSkill_MagicBall::BeginSkill()
+void UCSkill_MagicBall::BeginSkill()
 {
 	Super::BeginSkill();
 	const FVector EnemyLocation = GetEnemyLocation(OwnerCharacter);
 	Shooter->BezierShoot(EnemyLocation,OwnerCharacter->GetActorLocation());
 }
 
-FVector UUCSkill_MagicBall::GetEnemyLocation(ACharacter* InOwner) const
+FVector UCSkill_MagicBall::GetEnemyLocation(ACharacter* InOwner) const
 {
 	FVector EnemyLocation;
 
@@ -67,3 +70,4 @@ FVector UUCSkill_MagicBall::GetEnemyLocation(ACharacter* InOwner) const
 
 	return EnemyLocation;
 }
+

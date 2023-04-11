@@ -55,7 +55,7 @@ public:
 
 public:
 	UFUNCTION(NetMulticast, Reliable)
-		void PlayMontage(UAnimMontage* montage);
+		void MultiCastPlayMontage(UAnimMontage* montage);
 
 	UFUNCTION(Reliable, Server)
 		void ServerPlayMontage(UAnimMontage* Montage);

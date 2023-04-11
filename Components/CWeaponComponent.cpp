@@ -77,17 +77,20 @@ void UCWeaponComponent::ServerChangeType_Implementation(EWeaponType InType)
 
 void UCWeaponComponent::SetUnarmedMode() 
 {
-	ServerChangeType(EWeaponType::Unarmed);
+	//if(OwnerCharacter->HasAuthority())
+		ServerChangeType(EWeaponType::Unarmed);
 }
 
 void UCWeaponComponent::SetOneHandMode()
 {
-	ServerChangeType(EWeaponType::OneHand);
+	//if (OwnerCharacter->HasAuthority())
+		ServerChangeType(EWeaponType::OneHand);
 }
 	
 void UCWeaponComponent::SetBowMode()
 {
-	ServerChangeType(EWeaponType::Bow);
+	//if (OwnerCharacter->HasAuthority())
+		ServerChangeType(EWeaponType::Bow);
 }
 
 void UCWeaponComponent::DoAction_Implementation()
@@ -114,7 +117,7 @@ void UCWeaponComponent::DoAction_Implementation()
 	Status->Stop();
 	UAnimMontage* montage = DataAsset[(int32)Type]->GetActionDatas()[Combo_index].Montage;
 
-	OwnerCharacter->ServerPlayMontage(montage);
+	OwnerCharacter->MultiCastPlayMontage(montage);
 }
 
 
@@ -132,7 +135,7 @@ void UCWeaponComponent::BeginDoAction_Implementation()
 		return;
 	}
 
-	OwnerCharacter->ServerPlayMontage(montage);
+	OwnerCharacter->MultiCastPlayMontage(montage);
 }
 
 void UCWeaponComponent::EndDoAction_Implementation()
