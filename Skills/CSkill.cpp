@@ -4,6 +4,7 @@
 #include "Components/CSkillComponent.h"
 #include "GameFramework/Character.h"
 #include "Character/CCharacter.h"
+#include "Net/UnrealNetwork.h"
 
 void UCSkill::ExcuteSkill(ACharacter* InOwner)
 {
@@ -31,7 +32,6 @@ void UCSkill::EndSkill()
 	SkillComponent->OnEndSkill.Remove(EndHandle);
 	OwnerCharacter->OnCharacterHit.Remove(HitCancleHandle);
 }
-
 
 void UCSkill::QuickSlotCall(ACharacter* InOwner)
 {

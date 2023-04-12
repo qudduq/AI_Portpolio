@@ -4,12 +4,12 @@
 #include "Components//BezierComponent.h"
 #include "Enemy/CEnemy.h"
 #include "Particles/ParticleSystem.h"
-#include "NiagaraSystem.h"
-#include "Kismet/GameplayStatics.h"
-#include "NiagaraFunctionLibrary.h"
 #include "Particles/ParticleSystemComponent.h"
-#include "Utillities/CLog.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Utillities/CLog.h"
 #include "Net/UnrealNetwork.h"
 
 ABezierShooter::ABezierShooter()
@@ -38,56 +38,64 @@ void ABezierShooter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 void ABezierShooter::BeginPlay()
 {
 	Super::BeginPlay();
-	SetLifeSpan(5);
 
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ABezierShooter::OnComponentBeginOverlap);
-
-	CLog::Print(GetOwner()->GetName());
 }
 
-void ABezierShooter::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                                            UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ABezierShooter::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ACEnemy* enemy = Cast<ACEnemy>(OtherActor);
-	if(enemy == nullptr)
-		return;
+	ACCharacter* OwnerCharacter = Cast<ACCharacter>(GetOwner());
 
-	ServerPlayParticle();
+	if (OwnerCharacter == OtherActor) return;
+	if (OwnerCharacter->GetClass() == OtherActor->GetClass()) return;
+
+	auto childrens = Root->GetAttachChildren();
+	for(auto const & children : childrens)
+	{
+		if(Cast<UFXSystemComponent>(children))
+		{
+			Cast<UFXSystemComponent>(children)->SetHiddenInGame(true);
+		}
+	}
+
+	PlayParticle();
 }
 
 void ABezierShooter::PlayParticle_Implementation()
 {
 	if (Cast<UParticleSystem>(Particle) != nullptr)
 	{
-		auto effect = UGameplayStatics::SpawnEmitterAtLocation
+		UParticleSystemComponent* effect = UGameplayStatics::SpawnEmitterAtLocation
 		(
 			GetWorld(),
 			Cast<UParticleSystem>(Particle),
 			GetActorLocation()
 		);
-		effect->SetActive(true);
-		effect->SetIsReplicated(true);
+		effect->OnSystemFinished.AddDynamic(this, &ABezierShooter::OnParticleFinish);
 	}
 	else if (Cast<UNiagaraSystem>(Particle) != nullptr)
 	{
-		auto effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+		UNiagaraComponent* effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
 			GetWorld(),
 			Cast<UNiagaraSystem>(Particle),
 			GetActorLocation()
 		);
-
-		effect->Activate(true);
-		effect->SetIsReplicated(true);
+		effect->OnSystemFinished.AddDynamic(this, &ABezierShooter::OnNiagaraFinish);
 	}
-}
-
-void ABezierShooter::ServerPlayParticle_Implementation()
-{
-	PlayParticle();
 }
 
 void ABezierShooter::BezierShoot(FVector Enemy, FVector PlayerLocation)
 {
 	Bezier->ShootBezierCurve(Enemy,PlayerLocation);
+}
+
+void ABezierShooter::OnNiagaraFinish(UNiagaraComponent* niagara)
+{
+	Destroy();
+}
+
+void ABezierShooter::OnParticleFinish(UParticleSystemComponent* PSystem)
+{
+	Destroy();
 }

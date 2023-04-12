@@ -5,7 +5,6 @@
 #include "BezierShooter.generated.h"
 
 class UFXSystemAsset;
-DECLARE_DELEGATE_OneParam(FOnObejectHit, FVector);
 
 UCLASS()
 class AI_PORTPOLIO_API ABezierShooter : public AActor
@@ -14,12 +13,11 @@ class AI_PORTPOLIO_API ABezierShooter : public AActor
 
 private:
 	UPROPERTY(EditAnywhere)
-		class USceneComponent* Root;
+		USceneComponent* Root;
 
 	UPROPERTY(EditAnywhere)
 		class USphereComponent* Sphere;
 
-		
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -34,19 +32,20 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UFUNCTION()	
+	UFUNCTION()
 		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	UFUNCTION(NetMulticast, Reliable)
 		void PlayParticle();
-
-	UFUNCTION(Reliable, Server)
-		void ServerPlayParticle();
 public:
 	void BezierShoot(FVector Enemy, FVector PlayerLocation);
-	
 
-	FOnObejectHit OnObejectHit;
+private:
+	UFUNCTION()
+		void OnNiagaraFinish(class UNiagaraComponent* niagara);
+
+	UFUNCTION()
+		void OnParticleFinish(class UParticleSystemComponent* PSystem);
 
 private:
 	UPROPERTY(Replicated)

@@ -29,7 +29,6 @@ public:
 	virtual void EndSkill();
 
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }
-	
 
 public:
 	virtual void QuickSlotCall(class ACharacter* InOwner) override;

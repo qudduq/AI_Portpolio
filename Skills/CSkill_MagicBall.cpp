@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Utillities/CLog.h"
-#include "Particles/ParticleSystemComponent.h"
 
 void UCSkill_MagicBall::ExcuteSkill(ACharacter* InOwner)
 {

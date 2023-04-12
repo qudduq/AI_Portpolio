@@ -8,7 +8,8 @@
 #include "CWidgetDrag.h"
 #include "Components/SizeBox.h"
 #include "Kismet/GameplayStatics.h"
-#include "Net/UnrealNetwork.h"
+#include "Components/CSkillComponent.h"
+#include "GameFramework/Character.h"
 
 
 void UCListSkill::NativeOnListItemObjectSet(UObject* ListItemObject)
@@ -23,17 +24,22 @@ void UCListSkill::NativeOnListItemObjectSet(UObject* ListItemObject)
 
 FReply UCListSkill::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	FReply returnParent = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 	/*더블 클릭 확인
 	 *타이머 핸들러의 활성시간을 세팅하여 활성화되어있으면 더블클릭 아니면 일반클릭으로 판단합니다.
 	 */
 	if (GetWorld()->GetTimerManager().IsTimerActive(handle))
 	{
-		if (skill == NULL) return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+		if (skill == nullptr) return returnParent;
 
 		ACharacter* owner = UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
 		if(owner == nullptr) return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
-		skill->ExcuteSkill(owner);
+		UCSkillComponent* skillComponent = Cast<UCSkillComponent>(owner->GetComponentByClass(UCSkillComponent::StaticClass()));
+		if (skillComponent == nullptr)
+			return returnParent;
+
+		skillComponent->ExcuteSkill(skill->GetID());
 
 		GetWorld()->GetTimerManager().ClearTimer(handle);
 		return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
@@ -67,13 +73,4 @@ void UCListSkill::NativeOnDragDetected(const FGeometry& InGeometry, const FPoint
 
 	OutOperation = dragdrop;
 }
-
-void UCListSkill::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(UCListSkill, skill);
-	DOREPLIFETIME(UCListSkill, texture);
-}
-
 

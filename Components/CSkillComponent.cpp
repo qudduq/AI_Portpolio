@@ -47,12 +47,20 @@ void UCSkillComponent::BeginPlay()
 	CLog::Log("");
 }
 
-const  TMap<FName, UCSkill*>& UCSkillComponent::GetSkillMapData(EWeaponType WeaponType)
+UCSkill* UCSkillComponent::GetSkillData(EWeaponType WeaponType, FName ID)
 {
-	return SkillDataAssets[static_cast<int32>(WeaponType)]->GetSkillMapDatas();
+	for(const auto & skill : GetSkillArrayData(WeaponType))
+	{
+		if(skill->GetID() == ID)
+		{
+			return skill;
+		}
+	}
+
+	return nullptr;
 }
 
-const TArray<UCSkill*>& UCSkillComponent::GetSkillArrayData(EWeaponType WeaponType)
+const TArray<UCSkill*>& UCSkillComponent::GetSkillArrayData(EWeaponType WeaponType) const
 {
 	return SkillDataAssets[static_cast<int32>(WeaponType)]->GetSkillArrayDatas();
 }
@@ -92,14 +100,13 @@ void UCSkillComponent::ExcuteSkill_Implementation(FName SkillID)
 		return;
 	}
 
-
-	UCSkill* const* skill = GetSkillMapData(weaponComponent->GetWeaponType()).Find(SkillID);
+	UCSkill* skill = GetSkillData(weaponComponent->GetWeaponType(), SkillID);
 	if (skill == nullptr)
 	{
 		return;
 	}
 
-	(*skill)->ExcuteSkill(OwnerCharacter);
+	skill->ExcuteSkill(OwnerCharacter);
 }
 
 

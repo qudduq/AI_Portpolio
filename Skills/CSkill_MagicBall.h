@@ -21,7 +21,6 @@ private:
 	UPROPERTY(EditAnywhere)
 		float Radius = 10.0f;
 
-
 public:
 	virtual void ExcuteSkill(class ACharacter* InOwner) override;
 	virtual void BeginSkill() override;
