@@ -9,6 +9,7 @@
 #include "Components/CWeaponComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Utillities/CLog.h"
+#include "Utillities/TaskHelper.h"
 #include "Widget/CListView.h"
 
 ACPlayerController::ACPlayerController()
@@ -29,31 +30,44 @@ void ACPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SkillList", IE_Pressed, this, &ACPlayerController::CLickSkillList);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ACPlayerController::Jump);
 
-	//Key값이 추가로 입력되고있음
-	InputComponent->BindAction("QuickSlot", IE_Pressed, this, &ACPlayerController::ServerQuickSlotCall);
+	//매개변수로 해당 Key값이 입력되고있습니다.
+	InputComponent->BindAction("QuickSlot", IE_Pressed, this, &ACPlayerController::QuickSlotCall);
 }
 
-void ACPlayerController::OnPossess(APawn* aPawn)
-{
-	Super::OnPossess(aPawn);
-
-}
-
-void ACPlayerController::MoveForward(float Axis)
+ACPlayer* ACPlayerController::CheckPlayer()
 {
 	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
 	if (CPlayer == nullptr)
 	{
+		FString str = "";
+		str += GetName();
+		str += " Not possessed by a player";
+		CLog::Log(str);
+		return nullptr;
+	}
+
+	return CPlayer;
+}
+
+void ACPlayerController::MoveForward(float Axis)
+{
+	ACPlayer* CPlayer = CheckPlayer();
+	if (CPlayer == nullptr)
+	{
 		return;
 	}
-	
 
-	UCStatusComponent* Status = Cast<UCStatusComponent>(CPlayer->GetComponentByClass(UCStatusComponent::StaticClass()));
-	if(Status == nullptr)
+	UCStatusComponent* Status = TaskHelper::GetComponet<UCStatusComponent>(CPlayer);
+	if (Status == nullptr)
+	{
 		return;
+	}
 
 	if (Status->IsMove() == false)
+	{
+		CLog::Log("Current is Don't Move");
 		return;
+	}
 
 	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
 	FVector Dir = FQuat(rotator).GetForwardVector();
@@ -63,18 +77,23 @@ void ACPlayerController::MoveForward(float Axis)
 
 void ACPlayerController::MoveRight(float Axis)
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
 	}
 
-	UCStatusComponent* Status = Cast<UCStatusComponent>(CPlayer->GetComponentByClass(UCStatusComponent::StaticClass()));
+	UCStatusComponent* Status = TaskHelper::GetComponet<UCStatusComponent>(CPlayer);
 	if (Status == nullptr)
+	{
 		return;
+	}
 
 	if (Status->IsMove() == false)
+	{
+		CLog::Log("Current is Don't Move");
 		return;
+	}
 
 	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
 	FVector Dir = FQuat(rotator).GetRightVector();
@@ -84,7 +103,7 @@ void ACPlayerController::MoveRight(float Axis)
 
 void ACPlayerController::CameraYaw(float Axis)
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -101,7 +120,7 @@ void ACPlayerController::CameraYaw(float Axis)
 
 void ACPlayerController::ChangeView()
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -109,7 +128,7 @@ void ACPlayerController::ChangeView()
 
 	bQuterView = !bQuterView;
 
-	USpringArmComponent* SpringArmComponent = Cast<USpringArmComponent>(CPlayer->GetComponentByClass(USpringArmComponent::StaticClass()));
+	USpringArmComponent* SpringArmComponent = TaskHelper::GetComponet<USpringArmComponent>(CPlayer);
 	if(SpringArmComponent == nullptr)
 	{
 		return;
@@ -133,7 +152,7 @@ void ACPlayerController::ChangeView()
 
 void ACPlayerController::MoveCamera()
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -153,7 +172,7 @@ void ACPlayerController::MoveCamera()
 
 void ACPlayerController::ChangeWeapon()
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -167,23 +186,19 @@ void ACPlayerController::ChangeWeapon()
 	weaponnum++;
 	weaponnum >= (int)EWeaponType::Max ? weaponnum = 0 : weaponnum;
 	CLog::Log(weaponnum);
-	
-	if (CPlayer == nullptr)
-	{
-		return;
-	}
 
-	UCWeaponComponent* Weapon = Cast<UCWeaponComponent>(CPlayer->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	UCWeaponComponent* Weapon = TaskHelper::GetComponet<UCWeaponComponent>(CPlayer);
 	if(Weapon == nullptr)
 	{
 		return;
 	}
-	UCSkillComponent* Skill = Cast<UCSkillComponent>(CPlayer->GetComponentByClass(UCSkillComponent::StaticClass()));
+	UCSkillComponent* Skill = TaskHelper::GetComponet<UCSkillComponent>(CPlayer);
 	if (Skill == nullptr)
 	{
 		return;
 	}
-	
+
+	//무기의 상태 변경과 현재 스킬목록을 리스트뷰에 넘기기 위해서 스킬을 무기에 맞게 세팅해주었습니다.
 	switch (weaponnum)
 	{
 	case 0: 
@@ -205,7 +220,7 @@ void ACPlayerController::ChangeWeapon()
 
 void ACPlayerController::MouseView()
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -217,7 +232,7 @@ void ACPlayerController::MouseView()
 
 void ACPlayerController::DoAction()
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -228,7 +243,7 @@ void ACPlayerController::DoAction()
 		return;
 	}
 
-	UCWeaponComponent* Weapon = Cast<UCWeaponComponent>(CPlayer->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	UCWeaponComponent* Weapon = TaskHelper::GetComponet<UCWeaponComponent>(CPlayer);
 	if(Weapon == nullptr)
 	{
 		return;
@@ -236,9 +251,9 @@ void ACPlayerController::DoAction()
 	Weapon->DoAction();
 }
 
-void ACPlayerController::QuickSlot_Implementation(const FKey SetNum)
+void ACPlayerController::ServerQuickSlotCall(const FKey SetNum)
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -249,7 +264,9 @@ void ACPlayerController::QuickSlot_Implementation(const FKey SetNum)
 		return;
 	}
 
-	UCQuickSlotComponent* QuickSlot = Cast<UCQuickSlotComponent>(CPlayer->GetComponentByClass(UCQuickSlotComponent::StaticClass()));
+	auto testid = typeid(UCQuickSlotComponent).name();
+
+	UCQuickSlotComponent* QuickSlot = TaskHelper::GetComponet<UCQuickSlotComponent>(CPlayer);
 	if(QuickSlot == nullptr)
 	{
 		return;
@@ -258,14 +275,14 @@ void ACPlayerController::QuickSlot_Implementation(const FKey SetNum)
 	QuickSlot->QuickSlotCall(SetNum);
 }
 
-void ACPlayerController::ServerQuickSlotCall_Implementation(const FKey SetNum)
+void ACPlayerController::QuickSlotCall(const FKey SetKey)
 {
-	QuickSlot(SetNum);
+	ServerQuickSlotCall(SetKey);
 }
 
 void ACPlayerController::CLickSkillList()
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;
@@ -283,7 +300,7 @@ void ACPlayerController::CLickSkillList()
 
 void ACPlayerController::Jump()
 {
-	ACPlayer* CPlayer = Cast<ACPlayer>(GetPawn());
+	ACPlayer* CPlayer = CheckPlayer();
 	if (CPlayer == nullptr)
 	{
 		return;

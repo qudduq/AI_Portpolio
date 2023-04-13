@@ -10,19 +10,37 @@ bool UCQuickSlot_Widget::NativeOnDrop(const FGeometry& InGeometry, const FDragDr
 {
 	//드레드되어온 데이터를 확인해줍니다.
 	UCWidgetDrag* dragwidget = Cast<UCWidgetDrag>(InOperation);
-	if (dragwidget == nullptr) return false;
+	if (dragwidget == nullptr)
+	{
+		CLog::Log("Not Have Drag Data");
+		return false;
+	}
 
 	//해당데이터가 퀵슬롯 인터페이스를 상속받고있는지 확인합니다.
 	IQuickSlotInterface* slotdata = Cast<IQuickSlotInterface>(dragwidget->Payload);
-	if (slotdata == nullptr) return false;
+	if (slotdata == nullptr)
+	{
+		CLog::Log("Does Not Inherit QuickSlotInterface Object");
+		return false;
+	}
 
+	//플레이어를 얻어옵니다.
 	ACharacter* ownercharacter = GetOwningPlayerPawn<ACharacter>();
-	if (ownercharacter == nullptr) return false;
+	if (ownercharacter == nullptr)
+	{
+		CLog::Log("Have Not Player");
+		return false;
+	}
 
-	//해당 퀵슬롯에 등록해 줍니다.
+	
 	UCQuickSlotComponent* QuickSlotComponent = Cast<UCQuickSlotComponent>(ownercharacter->GetComponentByClass(UCQuickSlotComponent::StaticClass()));
-	if (QuickSlotComponent == nullptr) return false;
-
+	if (QuickSlotComponent == nullptr)
+	{
+		CLog::Log("Have Not QuickSlotComponent");
+		return false;
+	}
+	//해당 퀵슬롯에 등록해 줍니다.
+	//해당 퀵슬롯 데이터는 IQuickSlotInterface* 의형태로 캐스팅되어 저장됩니다.
 	QuickSlotComponent->SetQuickSlot(SlotName, slotdata);
 
 	//마지막으로 보여질 텍스쳐까지 세팅해줍니다.

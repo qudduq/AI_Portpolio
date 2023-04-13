@@ -2,12 +2,11 @@
 #include "GameFramework/Character.h"
 #include "Skills/CSkillData.h"
 #include "Skills/CSkill.h"
-#include "Animation/AnimMontage.h"
 #include "CStateComponent.h"
 #include "Character/CCharacter.h"
-#include "Net/UnrealNetwork.h"
 #include "Skills/UCSkillStructure.h"
 #include "Utillities/CLog.h"
+#include "Utillities/TaskHelper.h"
 #include "Components/CWeaponComponent.h"
 
 
@@ -17,19 +16,13 @@ UCSkillComponent::UCSkillComponent()
 	
 }
 
-void UCSkillComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(UCSkillComponent, SkillDataAssets);
-}
-
 void UCSkillComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
 	ACCharacter* OwnerCharacter = Cast<ACCharacter>(GetOwner());
 
+	// 데이터에셋에 등록된 UCSkill들을 객체화 시켜줍니다.
 	for (int32 i = 0; i < (int32)EWeaponType::Max; i++)
 	{
 		if (SkillDataAssets[i] == nullptr)
@@ -43,12 +36,11 @@ void UCSkillComponent::BeginPlay()
 		else
 			SkillDataAssets[i]->BeginPlay();
 	}
-
-	CLog::Log("");
 }
 
 UCSkill* UCSkillComponent::GetSkillData(EWeaponType WeaponType, FName ID)
 {
+	// 해당 아이디에 맞는 스킬을 찾습니다.
 	for(const auto & skill : GetSkillArrayData(WeaponType))
 	{
 		if(skill->GetID() == ID)
@@ -83,6 +75,7 @@ void UCSkillComponent::EndSkill()
 
 bool UCSkillComponent::ExcuteSkill_Validate(FName SkillID)
 {
+	//검증 부분입니다. 현재는 정확히 어떤검증을 해야할지 정하지못해 true만 적어놓았습니다.
 	return true;
 }
 
@@ -94,7 +87,7 @@ void UCSkillComponent::ExcuteSkill_Implementation(FName SkillID)
 		return;
 	}
 
-	UCWeaponComponent* weaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	UCWeaponComponent* weaponComponent = TaskHelper::GetComponet<UCWeaponComponent>(OwnerCharacter);
 	if (weaponComponent == nullptr)
 	{
 		return;
