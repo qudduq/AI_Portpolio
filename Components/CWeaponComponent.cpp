@@ -141,6 +141,7 @@ void UCWeaponComponent::BeginDoAction_Implementation()
 void UCWeaponComponent::EndDoAction_Implementation()
 {
 	State->SetIdleMode();
+	CLog::Log("WeaponComponent SetIdle");
 	Status->Move();
 	DisableNext();
 	OffNextAction();

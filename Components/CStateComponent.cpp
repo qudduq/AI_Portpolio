@@ -1,5 +1,7 @@
 #include "Components/CStateComponent.h"
 
+#include "Utillities/CLog.h"
+
 UCStateComponent::UCStateComponent()
 {
 }
@@ -16,6 +18,7 @@ void UCStateComponent::SetIdleMode()
 	ChangeType(EStateType::Idle);
 	if(OnIdleMode.IsBound() == true)
 	{
+		CLog::Log("SetIdle");
 		OnIdleMode.Execute(Cast<AAIController>(GetOwner()->GetInstigatorController()));
 	}
 }

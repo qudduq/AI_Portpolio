@@ -31,19 +31,24 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	UCBehaviorComponent* behavior = Cast<UCBehaviorComponent>(ai->GetComponentByClass(UCBehaviorComponent::StaticClass()));
 	if (behavior == nullptr) return;
 
-
-
 	ACPlayer* player = behavior->GetTargetPlayer();
 	if(player == nullptr)
 		return;
 
-	int access = FMath::RandRange(0, 1);
-
-	if(behavior->IsActionMode() == true)
+	//CLog::Log("-------------------------------");
+	//CLog::Log(UEnum::GetValueAsString(behavior->GetBehaviorType()));
+	//CLog::Log("--------------------------------------");
+	bool bAction = false;
+	bAction |= behavior->IsActionMode();
+	bAction |= behavior->IscloseActionMode();
+	bAction |= behavior->IsmiddleActionMode();
+	bAction |= behavior->IsfarActionMode();
+	if(bAction)
 	{
 		return;
 	}
 
+	int access = FMath::RandRange(0, 1);
 	float distance = ai->GetDistanceTo(player);
 	if (distance < controller->GetCloseActionRange())
 	{
@@ -54,10 +59,11 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		if(access)
 		{
 			behavior->SetAccessMode();
+			
 		}
 		else
 		{
-			behavior->SetmiddleActionMode();
+			//behavior->SetmiddleActionMode();
 		}
 	}
 	else if (distance < controller->GetFarActionRange())
@@ -69,8 +75,7 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		else
 		{
 			//TODO : 장거리 스킬 구현후 교체
-			behavior->SetWaitMode();
-			CLog::Log("FatSkill_Excute");
+			//behavior->SetWaitMode();
 		}
 	}
 }

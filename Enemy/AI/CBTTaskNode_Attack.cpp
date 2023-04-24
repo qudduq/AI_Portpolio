@@ -21,10 +21,10 @@ EBTNodeResult::Type UCBTTaskNode_Attack::ExecuteTask(UBehaviorTreeComponent& Own
 	UCWeaponComponent* weapon = Cast<UCWeaponComponent>(ai->GetComponentByClass(UCWeaponComponent::StaticClass()));
 	UCStateComponent* state = Cast<UCStateComponent>(ai->GetComponentByClass(UCStateComponent::StaticClass()));
 
-	if(state->IsActionMode()) return EBTNodeResult::InProgress;
+	if(state->IsIdleMode() == false)
+		return EBTNodeResult::InProgress;
 
 	weapon->DoAction();
-	CLog::Log("AI_Action");
 
 	return EBTNodeResult::InProgress;
 }

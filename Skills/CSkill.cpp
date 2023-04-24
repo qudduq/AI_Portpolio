@@ -4,7 +4,6 @@
 #include "Components/CSkillComponent.h"
 #include "GameFramework/Character.h"
 #include "Character/CCharacter.h"
-#include "Net/UnrealNetwork.h"
 
 void UCSkill::ExcuteSkill(ACharacter* InOwner)
 {
@@ -27,6 +26,7 @@ void UCSkill::ExcuteSkill(ACharacter* InOwner)
 void UCSkill::EndSkill()
 {
 	State->SetIdleMode();
+	CLog::Log("EndSkill SetIdle");
 	UCSkillComponent* SkillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
 	SkillComponent->OnBeginSkill.Remove(BeginHandle);
 	SkillComponent->OnEndSkill.Remove(EndHandle);

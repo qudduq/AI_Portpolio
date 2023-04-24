@@ -128,6 +128,7 @@ void ACCharacter::CameraShaking()
 void ACCharacter::End_Hitted()
 {
 	State->SetIdleMode();
+	CLog::Log("End_Hitted SetIdle");
 }
 
 void ACCharacter::MultiCastPlayMontage_Implementation(UAnimMontage* montage)

@@ -75,5 +75,6 @@ private:
 private:
 	struct FDamageData* DamageData;
 	FTimerHandle TimerHandle;
+	bool bPlayMontage = false;
 };
 

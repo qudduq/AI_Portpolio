@@ -1,6 +1,7 @@
 #include "Notifies/CAnimNotifyState_Skill.h"
 #include "Components/CSkillComponent.h"
 #include "GameFramework/Character.h"
+#include "Utillities/CLog.h"
 
 
 FString UCAnimNotifyState_Skill::GetNotifyName_Implementation() const
@@ -49,5 +50,6 @@ void UCAnimNotifyState_Skill::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimS
 		return;
 	}
 
+	CLog::Log("EndNotify_end");
 	SkillComponent->EndSkill();
 }

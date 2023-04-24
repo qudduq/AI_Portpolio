@@ -62,7 +62,6 @@ public:
 
 public:
 	void DoAction(class ACharacter* InOwner);
-	void End_DoAction(class ACharacter* InOwner);
 
 	void PlayEffect(class ACharacter* InOwner);
 	void PlayEffect(class USkeletalMeshComponent* InMesh, FName InSocketName = NAME_None);

@@ -11,9 +11,6 @@ enum class EBehaviorType : uint8
 	Wait, Action, closeAction, middleAction, farAction, Patrol, Access, Defend, Hit, Avoid, Max,
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBehaviorTypeChanged, EBehaviorType, InPrevType, EBehaviorType, InNewType);
-
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class AI_PORTPOLIO_API UCBehaviorComponent : public UActorComponent
 {
@@ -56,15 +53,12 @@ public:
 	void SetAvoidMode();
 
 	class ACPlayer* GetTargetPlayer();
-
+	FORCEINLINE EBehaviorType GetBehaviorType() { return type; }
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	void ChangeType(EBehaviorType InType);
-
-public:
-	FBehaviorTypeChanged OnBehaviorTypeChanged;
 
 private:
 	UPROPERTY()

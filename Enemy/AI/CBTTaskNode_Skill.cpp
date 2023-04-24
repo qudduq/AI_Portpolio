@@ -18,6 +18,8 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	CLog::Log("ExcuteSkill");
+
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
 	if(controller == nullptr)
 	{
@@ -36,7 +38,11 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 		return Result;
 	}
 
-	stateComponent->OnIdleMode.BindUObject(this, &UCBTTaskNode_Skill::EndAction);
+	if(stateComponent->IsActionMode())
+	{
+		return Result;
+	}
+
 	UCSkill* skill = ChoiceSkill(owner);
 	if (skill == nullptr)
 	{
@@ -47,6 +53,7 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 		return Result;
 	}
 	skill->ExcuteSkill(owner);
+	stateComponent->OnIdleMode.BindUObject(this, &UCBTTaskNode_Skill::EndAction);
 
 	return EBTNodeResult::InProgress;
 }
