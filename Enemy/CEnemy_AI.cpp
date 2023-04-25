@@ -17,7 +17,7 @@ void ACEnemy_AI::BeginPlay()
 	Behavior->SetWaitMode();
 }
 
-void ACEnemy_AI::Hitted()
+void ACEnemy_AI::Hitted_Implementation()
 {
 	Super::Hitted();
 
@@ -25,7 +25,7 @@ void ACEnemy_AI::Hitted()
 	controller->GetBlackboardComponent()->SetValueAsEnum("Behavior", (int32)EBehaviorType::Hit);
 }
 
-void ACEnemy_AI::End_Hitted()
+void ACEnemy_AI::End_Hitted_Implementation()
 {
 	Super::End_Hitted();
 

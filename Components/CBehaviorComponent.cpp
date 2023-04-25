@@ -1,6 +1,14 @@
 #include "CBehaviorComponent.h"
 #include "Player/CPlayer.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Net/UnrealNetwork.h"
+
+void UCBehaviorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UCBehaviorComponent, type);
+}
 
 UCBehaviorComponent::UCBehaviorComponent()
 {
@@ -69,7 +77,7 @@ ACPlayer* UCBehaviorComponent::GetTargetPlayer()
 	return Cast<ACPlayer>(Blackboard->GetValueAsObject(PlayerKey));
 }
 
-void UCBehaviorComponent::ChangeType(EBehaviorType InType)
+void UCBehaviorComponent::ChangeType_Implementation(EBehaviorType InType)
 {
 	type = InType;
 	Blackboard->SetValueAsEnum(BehaviorKey, (uint8)InType);

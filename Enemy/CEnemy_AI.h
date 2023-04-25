@@ -23,8 +23,11 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	virtual void Hitted() override;
-	virtual void End_Hitted() override;
+	UFUNCTION(Reliable, Server)
+		virtual void Hitted() override;
+
+	UFUNCTION(Reliable, Server)
+		virtual void End_Hitted() override;
 
 
 public:

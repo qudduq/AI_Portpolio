@@ -37,7 +37,7 @@ public:
 
 public:
 	FORCEINLINE void SetBlackboard(class UBlackboardComponent* InBlackboard) { Blackboard = InBlackboard; }
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
 	UCBehaviorComponent();
 
@@ -58,10 +58,12 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	void ChangeType(EBehaviorType InType);
+	UFUNCTION(Reliable, Server)
+		void ChangeType(EBehaviorType InType);
 
 private:
-	UPROPERTY()
-		class UBlackboardComponent* Blackboard;
-	EBehaviorType type = EBehaviorType::Wait;
+	class UBlackboardComponent* Blackboard;
+
+	UPROPERTY(Replicated)
+		EBehaviorType type = EBehaviorType::Wait;
 };
