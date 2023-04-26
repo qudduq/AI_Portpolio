@@ -21,15 +21,13 @@ void ACEnemy_AI::Hitted_Implementation()
 {
 	Super::Hitted();
 
-	AAIController* controller = Cast<AAIController>(GetController());
-	controller->GetBlackboardComponent()->SetValueAsEnum("Behavior", (int32)EBehaviorType::Hit);
+	Behavior->SetHitMode();
 }
 
 void ACEnemy_AI::End_Hitted_Implementation()
 {
 	Super::End_Hitted();
 
-	AAIController* controller = Cast<AAIController>(GetController());
-	controller->GetBlackboardComponent()->SetValueAsEnum("Behavior", (int32)EBehaviorType::Wait);
+	Behavior->SetWaitMode();
 }
 

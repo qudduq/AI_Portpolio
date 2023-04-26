@@ -52,8 +52,8 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 		CLog::Log(str);
 		return Result;
 	}
-	skill->ExcuteSkill(owner);
 	stateComponent->OnIdleMode.BindUObject(this, &UCBTTaskNode_Skill::EndAction);
+	skill->ExcuteSkill(owner);
 
 	return EBTNodeResult::InProgress;
 }

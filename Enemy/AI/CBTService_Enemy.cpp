@@ -35,18 +35,11 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	if(player == nullptr)
 		return;
 
-	//CLog::Log("-------------------------------");
-	//CLog::Log(UEnum::GetValueAsString(behavior->GetBehaviorType()));
-	//CLog::Log("--------------------------------------");
-	bool bAction = false;
-	bAction |= behavior->IsActionMode();
-	bAction |= behavior->IscloseActionMode();
-	bAction |= behavior->IsmiddleActionMode();
-	bAction |= behavior->IsfarActionMode();
-	if(bAction)
-	{
+	if(state->IsHittedMode())
 		return;
-	}
+
+	if(behavior->IsHittedMode())
+		return;
 
 	int access = FMath::RandRange(0, 1);
 	float distance = ai->GetDistanceTo(player);
@@ -59,11 +52,10 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		if(access)
 		{
 			behavior->SetAccessMode();
-			
 		}
 		else
 		{
-			//behavior->SetmiddleActionMode();
+			behavior->SetmiddleActionMode();
 		}
 	}
 	else if (distance < controller->GetFarActionRange())
@@ -75,7 +67,7 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		else
 		{
 			//TODO : 장거리 스킬 구현후 교체
-			//behavior->SetWaitMode();
+			
 		}
 	}
 }
