@@ -22,24 +22,36 @@ void UCBehaviorComponent::BeginPlay()
 	SetWaitMode();
 }
 
+void UCBehaviorComponent::OffLoopDecorator()
+{
+	if(OnActionDelegate.IsBound())
+	{
+		OnActionDelegate.Broadcast();
+	}
+}
+
 void UCBehaviorComponent::SetActionMode()
 {
 	ChangeType(EBehaviorType::Action);
+	OffLoopDecorator();
 }
 
 void UCBehaviorComponent::SetcloseActionMode()
 {
 	ChangeType(EBehaviorType::closeAction);
+	OffLoopDecorator();
 }
 
 void UCBehaviorComponent::SetmiddleActionMode()
 {
 	ChangeType(EBehaviorType::middleAction);
+	OffLoopDecorator();
 }
 
 void UCBehaviorComponent::SetfarActionMode()
 {
 	ChangeType(EBehaviorType::farAction);
+	OffLoopDecorator();
 }
 
 void UCBehaviorComponent::SetWaitMode()

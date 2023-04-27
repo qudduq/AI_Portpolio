@@ -11,6 +11,8 @@ enum class EBehaviorType : uint8
 	Wait, Action, closeAction, middleAction, farAction, Patrol, Access, Defend, Hit, Avoid, Max,
 };
 
+DECLARE_MULTICAST_DELEGATE(FOnActionDelegate);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class AI_PORTPOLIO_API UCBehaviorComponent : public UActorComponent
 {
@@ -54,12 +56,16 @@ public:
 
 	class ACPlayer* GetTargetPlayer();
 	FORCEINLINE EBehaviorType GetBehaviorType() { return type; }
+
+	FOnActionDelegate OnActionDelegate;
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UFUNCTION(Reliable, Server)
 		void ChangeType(EBehaviorType InType);
+
+	void OffLoopDecorator();
 
 private:
 	class UBlackboardComponent* Blackboard;

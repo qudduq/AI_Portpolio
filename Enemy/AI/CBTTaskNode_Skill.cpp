@@ -18,7 +18,7 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	CLog::Log("ExcuteSkill");
+	//CLog::Log("ExcuteSkill");
 
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
 	if(controller == nullptr)
