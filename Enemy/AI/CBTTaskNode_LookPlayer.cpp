@@ -6,6 +6,7 @@
 #include "Enemy/CEnemy_AI.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Player/CPlayer.h"
+#include "Utillities/CLog.h"
 
 UCBTTaskNode_LookPlayer::UCBTTaskNode_LookPlayer()
 {
@@ -33,6 +34,8 @@ EBTNodeResult::Type UCBTTaskNode_LookPlayer::ExecuteTask(UBehaviorTreeComponent&
 	{
 		return Result;
 	}
+
+	CLog::Log("Look Player");
 	FRotator rotation = UKismetMathLibrary::FindLookAtRotation(owner->GetActorLocation(), player->GetActorLocation());
 	owner->SetActorRotation(rotation);
 
