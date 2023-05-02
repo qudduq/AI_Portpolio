@@ -38,7 +38,7 @@ public:
 
 public:
 	FORCEINLINE bool GetbNextAction() { return bNextAction; }
-	FORCEINLINE ACAttachment* GetAttachment() { return Weapons[Type]; }
+	ACAttachment* GetAttachment();
 
 public:	
 	UCWeaponComponent();
@@ -91,7 +91,7 @@ private:
 	class UCStateComponent* State;
 	class UCStatusComponent* Status;
 
-	TMap<EWeaponType, class ACAttachment*> Weapons;
+	TMap<EWeaponType, ACAttachment*> Weapons;
 
 	UPROPERTY(Replicated)
 		EWeaponType Type = EWeaponType::Unarmed;

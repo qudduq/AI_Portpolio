@@ -197,6 +197,14 @@ const FDamageData UCWeaponComponent::GetDamageData()
 	return DataAsset[(int32)Type]->GetActionDatas()[Combo_index].DamageData;
 }
 
+ACAttachment* UCWeaponComponent::GetAttachment()
+{
+	if (Weapons.Find(Type) == nullptr)
+		return nullptr;
+
+	return Weapons[Type];
+}
+
 void UCWeaponComponent::HitCancle()
 {
 	EndDoAction();

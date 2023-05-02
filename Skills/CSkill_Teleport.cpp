@@ -5,10 +5,21 @@
 #include "Enemy/CEnemy.h"
 #include "Player/CPlayer.h"
 #include "Utillities/TaskHelper.h"
+#include "Components/CWeaponComponent.h"
+#include "Weapon/CAttachment.h"
 
 void UCSkill_Teleport::BeginSkill()
 {
 	Super::BeginSkill();
+	OwnerCharacter->SetHidden(true);
+	UCWeaponComponent* WeaponComponent = TaskHelper::GetComponet<UCWeaponComponent>(OwnerCharacter);
+	ACAttachment* Weapon = WeaponComponent->GetAttachment();
+	if(Weapon != nullptr)
+	{
+		Weapon->SetHidden(true);
+	}
+
+	PlaySkillEffect();
 
 	//TODO : AI는 EQS를 활용하여 이동할수있도록 해주기
 
@@ -22,6 +33,19 @@ void UCSkill_Teleport::BeginSkill()
 	}
 }
 
+void UCSkill_Teleport::EndSkill()
+{
+	PlaySkillEffect();
+	OwnerCharacter->SetHidden(false);
+	UCWeaponComponent* WeaponComponent = TaskHelper::GetComponet<UCWeaponComponent>(OwnerCharacter);
+	ACAttachment* Weapon = WeaponComponent->GetAttachment();
+	if (Weapon != nullptr)
+	{
+		Weapon->SetHidden(false);
+	}
+	Super::EndSkill();
+}
+
 void UCSkill_Teleport::PlayerTeleport()
 {
 	UCameraComponent* camera = TaskHelper::GetComponet<UCameraComponent>(OwnerCharacter);
@@ -31,6 +55,7 @@ void UCSkill_Teleport::PlayerTeleport()
 	}
 
 	FVector forward = camera->GetForwardVector();
+	forward.Z = 0.0f;
 	FVector Des = OwnerCharacter->GetActorLocation() + forward * TPDistance;
 	OwnerCharacter->TeleportTo(Des, OwnerCharacter->GetActorRotation());
 }

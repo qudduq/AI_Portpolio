@@ -30,6 +30,9 @@ public:
 
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }
 
+protected:
+	void PlaySkillEffect();
+
 public:
 	virtual void QuickSlotCall(class ACharacter* InOwner) override;
 	virtual UTexture2D* GetSlotTexture() override;

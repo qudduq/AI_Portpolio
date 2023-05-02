@@ -4,6 +4,8 @@
 #include "Components/CSkillComponent.h"
 #include "GameFramework/Character.h"
 #include "Character/CCharacter.h"
+#include "Particles/ParticleSystem.h"
+#include "Utillities/TaskHelper.h"
 
 void UCSkill::ExcuteSkill(ACharacter* InOwner)
 {
@@ -31,6 +33,14 @@ void UCSkill::EndSkill()
 	SkillComponent->OnBeginSkill.Remove(BeginHandle);
 	SkillComponent->OnEndSkill.Remove(EndHandle);
 	OwnerCharacter->OnCharacterHit.Remove(HitCancleHandle);
+}
+
+void UCSkill::PlaySkillEffect()
+{
+	if (Cast<UParticleSystem>(SkillData.Effect) != nullptr)
+		TaskHelper::PlayParticleSystem(OwnerCharacter->GetWorld(), SkillData.Effect, OwnerCharacter->GetActorLocation());
+	else if (Cast<UNiagaraSystem>(SkillData.Effect) != nullptr)
+		TaskHelper::PlayNiagaraSystem(OwnerCharacter->GetWorld(), SkillData.Effect, OwnerCharacter->GetActorLocation());
 }
 
 void UCSkill::QuickSlotCall(ACharacter* InOwner)

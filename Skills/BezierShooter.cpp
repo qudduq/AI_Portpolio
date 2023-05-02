@@ -3,12 +3,7 @@
 #include "Components/SphereComponent.h"
 #include "Components//BezierComponent.h"
 #include "Enemy/CEnemy.h"
-#include "Particles/ParticleSystem.h"
-#include "Particles/ParticleSystemComponent.h"
-#include "NiagaraSystem.h"
-#include "NiagaraFunctionLibrary.h"
-#include "NiagaraComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "Utillities/TaskHelper.h"
 #include "Utillities/CLog.h"
 #include "Net/UnrealNetwork.h"
 
@@ -65,22 +60,12 @@ void ABezierShooter::PlayParticle_Implementation()
 {
 	if (Cast<UParticleSystem>(Particle) != nullptr)
 	{
-		UParticleSystemComponent* effect = UGameplayStatics::SpawnEmitterAtLocation
-		(
-			GetWorld(),
-			Cast<UParticleSystem>(Particle),
-			GetActorLocation()
-		);
+		UParticleSystemComponent* effect = TaskHelper::PlayParticleSystem(this->GetWorld(), Particle, GetActorLocation());
 		effect->OnSystemFinished.AddDynamic(this, &ABezierShooter::OnParticleFinish);
 	}
 	else if (Cast<UNiagaraSystem>(Particle) != nullptr)
 	{
-		UNiagaraComponent* effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation
-		(
-			GetWorld(),
-			Cast<UNiagaraSystem>(Particle),
-			GetActorLocation()
-		);
+		UNiagaraComponent* effect = TaskHelper::PlayNiagaraSystem(this->GetWorld(), Particle, GetActorLocation());
 		effect->OnSystemFinished.AddDynamic(this, &ABezierShooter::OnNiagaraFinish);
 	}
 }

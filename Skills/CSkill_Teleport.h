@@ -20,6 +20,7 @@ private:
 
 public:
 	virtual void BeginSkill() override;
+	virtual void EndSkill() override;
 
 private:
 	void PlayerTeleport();
