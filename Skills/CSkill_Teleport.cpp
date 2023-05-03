@@ -19,7 +19,7 @@ void UCSkill_Teleport::BeginSkill()
 		Weapon->SetHidden(true);
 	}
 
-	PlaySkillEffect();
+	PlaySkillEffect(OwnerCharacter->GetActorLocation());
 
 	//TODO : AI는 EQS를 활용하여 이동할수있도록 해주기
 
@@ -35,7 +35,7 @@ void UCSkill_Teleport::BeginSkill()
 
 void UCSkill_Teleport::EndSkill()
 {
-	PlaySkillEffect();
+	PlaySkillEffect(OwnerCharacter->GetActorLocation());
 	OwnerCharacter->SetHidden(false);
 	UCWeaponComponent* WeaponComponent = TaskHelper::GetComponet<UCWeaponComponent>(OwnerCharacter);
 	ACAttachment* Weapon = WeaponComponent->GetAttachment();

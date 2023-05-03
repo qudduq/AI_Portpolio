@@ -35,12 +35,12 @@ void UCSkill::EndSkill()
 	OwnerCharacter->OnCharacterHit.Remove(HitCancleHandle);
 }
 
-void UCSkill::PlaySkillEffect()
+void UCSkill::PlaySkillEffect(FVector Location)
 {
 	if (Cast<UParticleSystem>(SkillData.Effect) != nullptr)
-		TaskHelper::PlayParticleSystem(OwnerCharacter->GetWorld(), SkillData.Effect, OwnerCharacter->GetActorLocation());
+		FXComponent = TaskHelper::PlayParticleSystem(OwnerCharacter->GetWorld(), SkillData.Effect, Location);
 	else if (Cast<UNiagaraSystem>(SkillData.Effect) != nullptr)
-		TaskHelper::PlayNiagaraSystem(OwnerCharacter->GetWorld(), SkillData.Effect, OwnerCharacter->GetActorLocation());
+		FXComponent = TaskHelper::PlayNiagaraSystem(OwnerCharacter->GetWorld(), SkillData.Effect, Location);
 }
 
 void UCSkill::QuickSlotCall(ACharacter* InOwner)

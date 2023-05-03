@@ -31,7 +31,7 @@ public:
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }
 
 protected:
-	void PlaySkillEffect();
+	void PlaySkillEffect(FVector Loaction);
 
 public:
 	virtual void QuickSlotCall(class ACharacter* InOwner) override;
@@ -44,9 +44,11 @@ private:
 protected:
 	class UCStateComponent* State;
 	class ACCharacter* OwnerCharacter;
+	class UFXSystemComponent* FXComponent;
 
 private:
 	FDelegateHandle HitCancleHandle;
 	FDelegateHandle BeginHandle;
 	FDelegateHandle EndHandle;
+	
 };

@@ -2,10 +2,9 @@
 
 #include "BezierShooter.h"
 #include "Character/CCharacter.h"
-#include "Enemy/CEnemy.h"
 #include "GameFramework/Character.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Utillities/CLog.h"
+#include "Utillities/TaskHelper.h"
 
 void UCSkill_MagicBall::ExcuteSkill(ACharacter* InOwner)
 {
@@ -24,49 +23,7 @@ void UCSkill_MagicBall::ExcuteSkill(ACharacter* InOwner)
 void UCSkill_MagicBall::BeginSkill()
 {
 	Super::BeginSkill();
-	const FVector EnemyLocation = GetEnemyLocation(OwnerCharacter);
+	const FVector EnemyLocation = TaskHelper::GetCircleSearchCharacter(OwnerCharacter, Radius, EDrawDebugTrace::None);
 	Shooter->BezierShoot(EnemyLocation,OwnerCharacter->GetActorLocation());
-}
-
-FVector UCSkill_MagicBall::GetEnemyLocation(ACharacter* InOwner) const
-{
-	FVector EnemyLocation;
-
-	TArray<AActor*> ignoreActors;
-	ignoreActors.Add(InOwner);
-
-	TArray<FHitResult> hitResults;
-	
-	UKismetSystemLibrary::SphereTraceMultiByProfile
-	(
-		InOwner->GetWorld(),
-		InOwner->GetActorLocation(),
-		InOwner->GetActorLocation(),
-		Radius,
-		"Enemy",
-		false,
-		ignoreActors,
-		EDrawDebugTrace::None,
-		hitResults,
-		true
-	);
-
-	float CloseEnemyDistance = 1e9;
-	for (const auto & hitresult : hitResults)
-	{
-		ACEnemy* enemy = Cast<ACEnemy>(hitresult.Actor);
-		if (enemy != nullptr)
-		{
-
-			float distance = FVector::Distance(OwnerCharacter->GetActorLocation(), hitresult.ImpactPoint);
-			if (CloseEnemyDistance > distance)
-			{
-				CloseEnemyDistance = distance;
-				EnemyLocation = hitresult.ImpactPoint;
-			}
-		}
-	}
-
-	return EnemyLocation;
 }
 
