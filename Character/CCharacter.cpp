@@ -11,6 +11,7 @@
 #include "Camera/CameraShake.h"
 #include "Manager/CameraShakeManager.h"
 #include "Utillities/CLog.h"
+#include "Utillities/TaskHelper.h"
 
 ACCharacter::ACCharacter()
 {

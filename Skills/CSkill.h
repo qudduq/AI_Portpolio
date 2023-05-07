@@ -4,11 +4,12 @@
 #include "UObject/NoExportTypes.h"
 #include "UCSkillStructure.h"
 #include "Widget/QuickSlotInterface.h"
+#include "Functions/RPCUObject.h"
 #include "CSkill.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)
 class AI_PORTPOLIO_API UCSkill :
-	public UObject,
+	public URPCUObject,
 	public IQuickSlotInterface
 {
 	GENERATED_BODY()
@@ -29,9 +30,12 @@ public:
 	virtual void EndSkill();
 
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }
-
 protected:
-	void PlaySkillEffect(FVector Loaction);
+	UFUNCTION(NetMulticast,Reliable)
+	void PlaySkillEffect(UObject* WorldContext, FVector Loaction);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void OffSkillEffect();
 
 public:
 	virtual void QuickSlotCall(class ACharacter* InOwner) override;
@@ -43,7 +47,6 @@ private:
 
 protected:
 	class UCStateComponent* State;
-	class ACCharacter* OwnerCharacter;
 	class UFXSystemComponent* FXComponent;
 
 private:

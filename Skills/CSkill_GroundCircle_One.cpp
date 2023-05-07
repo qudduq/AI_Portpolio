@@ -13,12 +13,11 @@ void UCSkill_GroundCircle_One::BeginSkill()
 
 	FVector Location = TaskHelper::GetCircleSearchCharacter(OwnerCharacter, Radius, EDrawDebugTrace::ForDuration);
 	Location.Z -= 80.0f;
-	PlaySkillEffect(Location);
-	
+	PlaySkillEffect(OwnerCharacter->GetWorld(),Location);
 }
 
 void UCSkill_GroundCircle_One::EndSkill()
 {
-	FXComponent->DestroyComponent();
+	OffSkillEffect();
 	Super::EndSkill();
 }

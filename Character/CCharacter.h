@@ -60,7 +60,6 @@ public:
 	UFUNCTION(Reliable, Server)
 		void ServerPlayMontage(UAnimMontage* Montage);
 
-
 protected:
 	//Hit Type별 별개 동작
 	virtual void Normal_Hit(EDamageType Type);

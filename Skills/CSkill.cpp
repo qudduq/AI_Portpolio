@@ -4,6 +4,7 @@
 #include "Components/CSkillComponent.h"
 #include "GameFramework/Character.h"
 #include "Character/CCharacter.h"
+#include "Net/UnrealNetwork.h"
 #include "Particles/ParticleSystem.h"
 #include "Utillities/TaskHelper.h"
 
@@ -35,12 +36,22 @@ void UCSkill::EndSkill()
 	OwnerCharacter->OnCharacterHit.Remove(HitCancleHandle);
 }
 
-void UCSkill::PlaySkillEffect(FVector Location)
+void UCSkill::PlaySkillEffect_Implementation(UObject* WorldContext, FVector Location)
 {
 	if (Cast<UParticleSystem>(SkillData.Effect) != nullptr)
-		FXComponent = TaskHelper::PlayParticleSystem(OwnerCharacter->GetWorld(), SkillData.Effect, Location);
+	{
+		FXComponent = TaskHelper::PlayParticleSystem(WorldContext, SkillData.Effect, Location);
+	}
 	else if (Cast<UNiagaraSystem>(SkillData.Effect) != nullptr)
-		FXComponent = TaskHelper::PlayNiagaraSystem(OwnerCharacter->GetWorld(), SkillData.Effect, Location);
+	{
+		FXComponent = TaskHelper::PlayNiagaraSystem(WorldContext, SkillData.Effect, Location);
+	}
+}
+
+void UCSkill::OffSkillEffect_Implementation()
+{
+	if (FXComponent != nullptr)
+		FXComponent->DestroyComponent();
 }
 
 void UCSkill::QuickSlotCall(ACharacter* InOwner)
