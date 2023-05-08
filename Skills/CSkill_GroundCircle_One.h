@@ -6,6 +6,8 @@
 #include "Skills/CSkill.h"
 #include "CSkill_GroundCircle_One.generated.h"
 
+class AGroundIce;
+
 UCLASS()
 class AI_PORTPOLIO_API UCSkill_GroundCircle_One : public UCSkill
 {
@@ -13,9 +15,19 @@ class AI_PORTPOLIO_API UCSkill_GroundCircle_One : public UCSkill
 
 private:
 	UPROPERTY(EditAnywhere)
+		TSubclassOf<AGroundIce> IceClass;
+
+	UPROPERTY(EditAnywhere)
 		float Radius = 1000.0f;
 
 public:
 	virtual void BeginSkill() override;
-	virtual void EndSkill() override;
+	virtual void ActiveSkill() override;
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps) const override;
+private:
+	FVector Location;
+
+	UPROPERTY(Replicated)
+		AGroundIce* Ice;
 };

@@ -19,10 +19,12 @@ float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContro
 {
 	float rtDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	ACCharacter* Opponent = Cast<ACCharacter>(EventInstigator->GetPawn());
-	FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Opponent->GetActorLocation());
-	SetActorRotation(lookRotation);
-
+	if (EventInstigator != nullptr)
+	{
+		ACCharacter* Opponent = Cast<ACCharacter>(EventInstigator->GetPawn());
+		FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Opponent->GetActorLocation());
+		SetActorRotation(lookRotation);
+	}
 	return rtDamage;
 }
 

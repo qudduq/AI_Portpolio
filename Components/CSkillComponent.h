@@ -7,6 +7,7 @@
 #include "CSkillComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnBeginSkill);
+DECLARE_MULTICAST_DELEGATE(FOnActiveSkill);
 DECLARE_MULTICAST_DELEGATE(FOnEndSkill);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -35,6 +36,8 @@ public:
 	//몽타쥬에서 특정 시간에 콜할수 있습니다.
 	void BeginSkill();
 
+	void ActiveSkill();
+
 	//스킬이 끝나갈때 FOnEndSkill델리게이트에 등록된 함수를 콜합니다.
 	void EndSkill();
 
@@ -46,6 +49,7 @@ public:
 
 public:
 	FOnBeginSkill OnBeginSkill;
+	FOnActiveSkill OnActiveSkill;
 	FOnEndSkill OnEndSkill;
 
 };

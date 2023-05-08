@@ -18,7 +18,6 @@ private:
 	UPROPERTY(EditAnywhere)
 		class USphereComponent* Sphere;
 
-
 private:
 	UPROPERTY(EditAnywhere)
 		class UBezierComponent* Bezier;

@@ -65,6 +65,14 @@ void UCSkillComponent::BeginSkill()
 	}
 }
 
+void UCSkillComponent::ActiveSkill()
+{
+	if(OnActiveSkill.IsBound())
+	{
+		OnActiveSkill.Broadcast();
+	}
+}
+
 void UCSkillComponent::EndSkill()
 {
 	if(OnEndSkill.IsBound())

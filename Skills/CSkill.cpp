@@ -20,6 +20,7 @@ void UCSkill::ExcuteSkill(ACharacter* InOwner)
 	UCSkillComponent* SkillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
 
 	BeginHandle = SkillComponent->OnBeginSkill.Add(FOnBeginSkill::FDelegate::CreateUObject(this, &UCSkill::BeginSkill));
+	ActiveHandle = SkillComponent->OnActiveSkill.Add(FOnActiveSkill::FDelegate::CreateUObject(this, &UCSkill::ActiveSkill));
 	EndHandle = SkillComponent->OnEndSkill.Add(FOnEndSkill::FDelegate::CreateUObject(this, &UCSkill::EndSkill));
 
 	State->SetActionMode();
@@ -32,6 +33,7 @@ void UCSkill::EndSkill()
 	CLog::Log("EndSkill SetIdle");
 	UCSkillComponent* SkillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
 	SkillComponent->OnBeginSkill.Remove(BeginHandle);
+	SkillComponent->OnActiveSkill.Remove(ActiveHandle);
 	SkillComponent->OnEndSkill.Remove(EndHandle);
 	OwnerCharacter->OnCharacterHit.Remove(HitCancleHandle);
 }

@@ -22,7 +22,7 @@ public:
 		class UAnimMontage* Montage;
 
 	UPROPERTY(EditAnywhere)
-		EDamageType Type;
+		FDamageData DamageData;
 
 	UPROPERTY(EditAnywhere)
 		EDistanceSkill Distance;
@@ -38,12 +38,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		class UFXSystemAsset* Effect;
-
-	//UPROPERTY(EditAnywhere)
-	//	FVector EffectLocation = FVector::ZeroVector;
-	//
-	//UPROPERTY(EditAnywhere)
-	//	FVector EffectScale = FVector::OneVector;
 };
 
 UCLASS()

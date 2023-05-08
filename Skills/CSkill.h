@@ -27,6 +27,7 @@ protected:
 public:
 	virtual void ExcuteSkill(class ACharacter* InOwner);
 	virtual void BeginSkill() {}
+	virtual void ActiveSkill() {}
 	virtual void EndSkill();
 
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }
@@ -52,6 +53,7 @@ protected:
 private:
 	FDelegateHandle HitCancleHandle;
 	FDelegateHandle BeginHandle;
+	FDelegateHandle ActiveHandle;
 	FDelegateHandle EndHandle;
 	
 };
