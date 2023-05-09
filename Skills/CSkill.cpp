@@ -29,31 +29,36 @@ void UCSkill::ExcuteSkill(ACharacter* InOwner)
 
 void UCSkill::EndSkill()
 {
-	State->SetIdleMode();
-	CLog::Log("EndSkill SetIdle");
+	FXComponents.Empty();
 	UCSkillComponent* SkillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
 	SkillComponent->OnBeginSkill.Remove(BeginHandle);
 	SkillComponent->OnActiveSkill.Remove(ActiveHandle);
 	SkillComponent->OnEndSkill.Remove(EndHandle);
 	OwnerCharacter->OnCharacterHit.Remove(HitCancleHandle);
+	State->SetIdleMode();
 }
 
 void UCSkill::PlaySkillEffect_Implementation(UObject* WorldContext, FVector Location)
 {
+	UFXSystemComponent* FX;
 	if (Cast<UParticleSystem>(SkillData.Effect) != nullptr)
 	{
-		FXComponent = TaskHelper::PlayParticleSystem(WorldContext, SkillData.Effect, Location);
+		FX = TaskHelper::PlayParticleSystem(WorldContext, SkillData.Effect, Location);
 	}
 	else if (Cast<UNiagaraSystem>(SkillData.Effect) != nullptr)
 	{
-		FXComponent = TaskHelper::PlayNiagaraSystem(WorldContext, SkillData.Effect, Location);
+		FX = TaskHelper::PlayNiagaraSystem(WorldContext, SkillData.Effect, Location);
 	}
+
+	FXComponents.Add(FX);
 }
 
 void UCSkill::OffSkillEffect_Implementation()
 {
-	if (FXComponent != nullptr)
-		FXComponent->DestroyComponent();
+	for(const auto& FX : FXComponents)
+	{
+		FX->DestroyComponent();
+	}
 }
 
 void UCSkill::QuickSlotCall(ACharacter* InOwner)

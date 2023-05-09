@@ -43,6 +43,7 @@ void UCSkill_Teleport::EndSkill()
 	{
 		Weapon->SetHidden(false);
 	}
+
 	Super::EndSkill();
 }
 

@@ -7,6 +7,9 @@
 #include "Functions/RPCUObject.h"
 #include "CSkill.generated.h"
 
+class UCStateComponent;
+class UFXSystemComponent;
+
 UCLASS(Blueprintable, BlueprintType)
 class AI_PORTPOLIO_API UCSkill :
 	public URPCUObject,
@@ -47,8 +50,8 @@ private:
 	void HitCancle();
 
 protected:
-	class UCStateComponent* State;
-	class UFXSystemComponent* FXComponent;
+	 UCStateComponent* State;
+	 TArray<UFXSystemComponent*> FXComponents;
 
 private:
 	FDelegateHandle HitCancleHandle;
