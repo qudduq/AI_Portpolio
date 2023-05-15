@@ -23,6 +23,11 @@ void ABezierShooter::SetParticle(UFXSystemAsset* particle)
 	Particle = particle;
 }
 
+void ABezierShooter::SetDamageData(const FDamageData& _DamageData)
+{
+	DamageData_ = _DamageData;
+}
+
 void ABezierShooter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -35,14 +40,26 @@ void ABezierShooter::BeginPlay()
 	Super::BeginPlay();
 
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ABezierShooter::OnComponentBeginOverlap);
+	Bezier->OnArrivePosition.AddUObject(this, &ABezierShooter::ArrivePostion);
 }
 
 void ABezierShooter::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ACCharacter* OwnerCharacter = Cast<ACCharacter>(GetOwner());
 
-	if (OwnerCharacter == OtherActor) return;
-	if (OwnerCharacter->GetClass() == OtherActor->GetClass()) return;
+	if (OwnerCharacter == OtherActor)
+	{
+		return;
+	}
+	if (OwnerCharacter->GetClass() == OtherActor->GetClass())
+	{
+		return;
+	}
+
+	if(this->GetClass() == OtherActor->GetClass())
+	{
+		return;
+	}
 
 	auto childrens = Root->GetAttachChildren();
 	for(auto const & children : childrens)
@@ -56,7 +73,7 @@ void ABezierShooter::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp
 	PlayParticle();
 }
 
-void ABezierShooter::PlayParticle_Implementation()
+void ABezierShooter::PlayParticle()
 {
 	if (Cast<UParticleSystem>(Particle) != nullptr)
 	{
@@ -70,9 +87,14 @@ void ABezierShooter::PlayParticle_Implementation()
 	}
 }
 
-void ABezierShooter::BezierShoot(FVector Enemy, FVector PlayerLocation)
+void ABezierShooter::ArrivePostion()
 {
-	Bezier->ShootBezierCurve(Enemy,PlayerLocation);
+	PlayParticle();
+}
+
+void ABezierShooter::BezierShoot(FVector DirLocation, FVector PlayerLocation)
+{
+	Bezier->ShootBezierCurve(DirLocation,PlayerLocation);
 }
 
 void ABezierShooter::OnNiagaraFinish(UNiagaraComponent* niagara)

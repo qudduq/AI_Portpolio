@@ -203,18 +203,19 @@ void ACPlayerController::ChangeWeapon()
 	{
 	case 0: 
 		Weapon->SetUnarmedMode();
-		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillArrayData(EWeaponType::Unarmed));
 		break;
 	case 1: 
 		Weapon->SetOneHandMode();
-		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillArrayData(EWeaponType::OneHand));
 		break;
 	case 2: 
 		Weapon->SetBowMode();
-		CPlayer->GetSkillList()->SetSKills(Skill->GetSkillArrayData(EWeaponType::Bow));
+		break;
+	case 3:
+		Weapon->SetMageMode();
 		break;
 	}
 
+	CPlayer->GetSkillList()->SetSKills(Skill->GetSkillArrayData(static_cast<EWeaponType>(weaponnum)));
 	isChanging = false;
 }
 

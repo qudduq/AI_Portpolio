@@ -12,10 +12,10 @@ void UCSkill_OneSlash::BeginSkill()
 	OwnerCharacter->GetCapsuleComponent()->SetCollisionProfileName(L"SkillOverlap");
 }
 
-void UCSkill_OneSlash::EndSkill()
+void UCSkill_OneSlash::EndSkill(bool bHit)
 {
 	CLog::Log("EndSkill");
 	OwnerCharacter->GetCapsuleComponent()->SetCollisionProfileName(L"Pawn");
 
-	Super::EndSkill();
+	Super::EndSkill(bHit);
 }

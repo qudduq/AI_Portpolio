@@ -31,7 +31,7 @@ public:
 	virtual void ExcuteSkill(class ACharacter* InOwner);
 	virtual void BeginSkill() {}
 	virtual void ActiveSkill() {}
-	virtual void EndSkill();
+	virtual void EndSkill(bool bHit);
 
 	FORCEINLINE EDistanceSkill GetSkillDistance() { return SkillData.Distance; }
 protected:
@@ -45,9 +45,6 @@ public:
 	virtual void QuickSlotCall(class ACharacter* InOwner) override;
 	virtual UTexture2D* GetSlotTexture() override;
 	virtual FName GetID() override;
-
-private:
-	void HitCancle();
 
 protected:
 	 UCStateComponent* State;

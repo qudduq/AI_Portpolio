@@ -12,7 +12,10 @@ void UCSkill_MagicBall::ExcuteSkill(ACharacter* InOwner)
 
 	// Object »õ¼º
 
-	FVector Location = OwnerCharacter->GetMesh()->GetSocketLocation(SocketName);
+	FVector Location = OwnerCharacter->GetActorLocation();
+	Location.Z += Vertical;
+	Location.X += Horizontal;
+
 	FTransform transform;
 	transform.SetLocation(Location);
 	Shooter = OwnerCharacter->GetWorld()->SpawnActorDeferred<ABezierShooter>(ShooterClass, transform, InOwner);

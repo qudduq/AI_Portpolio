@@ -11,5 +11,5 @@ class AI_PORTPOLIO_API UCSkill_OneSlash : public UCSkill
 
 public:
 	virtual void BeginSkill() override;
-	virtual void EndSkill() override;
+	virtual void EndSkill(bool bHit) override;
 };

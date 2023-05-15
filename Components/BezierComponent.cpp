@@ -23,6 +23,10 @@ void UBezierComponent::ShootBezierCurve(const FVector EndPostion,const FVector O
 				if (Rate >= 1.0f)
 				{
 					Rate = 0.0f;
+					if(OnArrivePosition.IsBound())
+					{
+						OnArrivePosition.Broadcast();
+					}
 					GetWorld()->GetTimerManager().ClearTimer(handle);
 					return;
 				}

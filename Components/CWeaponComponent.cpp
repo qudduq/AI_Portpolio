@@ -35,7 +35,7 @@ void UCWeaponComponent::BeginPlay()
 		params.Owner = OwnerCharacter;
 
 		//세팅해주는것과 소유하고있는 것은 다르다.
-		if (AttachmentClasses[i] != nullptr)
+		if (i < AttachmentClasses.Num() && AttachmentClasses[i] != nullptr)
 		{
 			SpawnWeapon(EWeaponType(i));
 		}
@@ -77,20 +77,22 @@ void UCWeaponComponent::ServerChangeType_Implementation(EWeaponType InType)
 
 void UCWeaponComponent::SetUnarmedMode() 
 {
-	//if(OwnerCharacter->HasAuthority())
-		ServerChangeType(EWeaponType::Unarmed);
+	ServerChangeType(EWeaponType::Unarmed);
 }
 
 void UCWeaponComponent::SetOneHandMode()
 {
-	//if (OwnerCharacter->HasAuthority())
-		ServerChangeType(EWeaponType::OneHand);
+	ServerChangeType(EWeaponType::OneHand);
 }
 	
 void UCWeaponComponent::SetBowMode()
 {
-	//if (OwnerCharacter->HasAuthority())
-		ServerChangeType(EWeaponType::Bow);
+	ServerChangeType(EWeaponType::Bow);
+}
+
+void UCWeaponComponent::SetMageMode()
+{
+	ServerChangeType(EWeaponType::Mage);
 }
 
 void UCWeaponComponent::DoAction_Implementation()
@@ -138,7 +140,7 @@ void UCWeaponComponent::BeginDoAction_Implementation()
 	OwnerCharacter->MultiCastPlayMontage(montage);
 }
 
-void UCWeaponComponent::EndDoAction_Implementation()
+void UCWeaponComponent::EndDoAction_Implementation(bool HitCancle)
 {
 	State->SetIdleMode();
 	CLog::Log("WeaponComponent SetIdle");
@@ -205,9 +207,9 @@ ACAttachment* UCWeaponComponent::GetAttachment()
 	return Weapons[Type];
 }
 
-void UCWeaponComponent::HitCancle()
+void UCWeaponComponent::HitCancle(bool HitCancle)
 {
-	EndDoAction();
+	EndDoAction(true);
 }
 
 

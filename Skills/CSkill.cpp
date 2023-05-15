@@ -16,7 +16,7 @@ void UCSkill::ExcuteSkill(ACharacter* InOwner)
 	if(State->IsActionMode())
 		return;
 
-	HitCancleHandle = OwnerCharacter->OnCharacterHit.Add(FOnCharacterHit::FDelegate::CreateUObject(this, &UCSkill::HitCancle));
+	HitCancleHandle = OwnerCharacter->OnCharacterHit.Add(FOnCharacterHit::FDelegate::CreateUObject(this, &UCSkill::EndSkill));
 	UCSkillComponent* SkillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
 
 	BeginHandle = SkillComponent->OnBeginSkill.Add(FOnBeginSkill::FDelegate::CreateUObject(this, &UCSkill::BeginSkill));
@@ -27,7 +27,7 @@ void UCSkill::ExcuteSkill(ACharacter* InOwner)
 	OwnerCharacter->MultiCastPlayMontage(SkillData.Montage);
 }
 
-void UCSkill::EndSkill()
+void UCSkill::EndSkill(bool bHit)
 {
 	FXComponents.Empty();
 	UCSkillComponent* SkillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
@@ -82,10 +82,4 @@ UTexture2D* UCSkill::GetSlotTexture()
 FName UCSkill::GetID()
 {
 	return SkillID;
-}
-
-void UCSkill::HitCancle()
-{
-	CLog::Log("HitCancle");
-	EndSkill();
 }

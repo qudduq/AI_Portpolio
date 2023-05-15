@@ -21,12 +21,15 @@ private:
 	UPROPERTY(EditAnywhere)
 		float Radius = 10.0f;
 
+	UPROPERTY(EditAnywhere)
+		float Horizontal = 0.0f;
+
+	UPROPERTY(EditAnywhere)
+		float Vertical = 0.0f;
+
 public:
 	virtual void ExcuteSkill(class ACharacter* InOwner) override;
 	virtual void BeginSkill() override;
-
-private:
-	FVector GetEnemyLocation(class ACharacter* InOwner) const;
 	
 private:
 	ABezierShooter* Shooter;

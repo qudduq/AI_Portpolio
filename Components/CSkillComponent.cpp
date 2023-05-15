@@ -77,7 +77,7 @@ void UCSkillComponent::EndSkill()
 {
 	if(OnEndSkill.IsBound())
 	{
-		OnEndSkill.Broadcast();
+		OnEndSkill.Broadcast(false);
 	}
 }
 

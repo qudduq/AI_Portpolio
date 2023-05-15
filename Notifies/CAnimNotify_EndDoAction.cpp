@@ -17,5 +17,5 @@ void UCAnimNotify_EndDoAction::Notify(USkeletalMeshComponent* MeshComp, UAnimSeq
 	UCWeaponComponent* weapon = Cast<UCWeaponComponent>(MeshComp->GetOwner()->GetComponentByClass(UCWeaponComponent::StaticClass()));
 	if (weapon == NULL) return;
 
-	weapon->EndDoAction();
+	weapon->EndDoAction(false);
 }

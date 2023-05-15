@@ -20,7 +20,7 @@ private:
 
 public:
 	virtual void BeginSkill() override;
-	virtual void EndSkill() override;
+	virtual void EndSkill(bool bHit) override;
 
 private:
 	void PlayerTeleport();

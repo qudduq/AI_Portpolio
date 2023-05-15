@@ -8,7 +8,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnBeginSkill);
 DECLARE_MULTICAST_DELEGATE(FOnActiveSkill);
-DECLARE_MULTICAST_DELEGATE(FOnEndSkill);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnEndSkill,bool);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class AI_PORTPOLIO_API UCSkillComponent : public UActorComponent

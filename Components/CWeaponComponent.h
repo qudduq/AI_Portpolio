@@ -8,7 +8,7 @@
 UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
-	Unarmed, OneHand, Bow, Max,
+	Unarmed, OneHand, Bow, Mage, Max,
 };
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FWeaponTypeChanged, EWeaponType);
@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetBowMode();
 
+	UFUNCTION(BlueprintCallable)
+		void SetMageMode();
+
 public:
 	FORCEINLINE bool GetbNextAction() { return bNextAction; }
 	ACAttachment* GetAttachment();
@@ -50,7 +53,7 @@ public:
 		void BeginDoAction();
 
 	UFUNCTION(Reliable, Server)
-		void EndDoAction();
+		void EndDoAction(bool HitCancle);
 
 	void EnableNext();
 	void DisableNext();
@@ -65,7 +68,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty > & OutLifetimeProps) const override;
 
 private:
-	void HitCancle();
+	void HitCancle(bool HitCancle);
 
 protected:	
 	virtual void BeginPlay() override;

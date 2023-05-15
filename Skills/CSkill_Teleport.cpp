@@ -33,7 +33,7 @@ void UCSkill_Teleport::BeginSkill()
 	}
 }
 
-void UCSkill_Teleport::EndSkill()
+void UCSkill_Teleport::EndSkill(bool bHit)
 {
 	PlaySkillEffect(OwnerCharacter->GetWorld(),OwnerCharacter->GetActorLocation());
 	OwnerCharacter->SetHidden(false);
@@ -44,7 +44,7 @@ void UCSkill_Teleport::EndSkill()
 		Weapon->SetHidden(false);
 	}
 
-	Super::EndSkill();
+	Super::EndSkill(bHit);
 }
 
 void UCSkill_Teleport::PlayerTeleport()

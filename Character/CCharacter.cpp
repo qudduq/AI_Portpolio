@@ -73,7 +73,7 @@ void ACCharacter::Hitted()
 
 	if(OnCharacterHit.IsBound())
 	{
-		OnCharacterHit.Broadcast();
+		OnCharacterHit.Broadcast(true);
 	}
 
 	EDamageType type = DamageData->Type;
@@ -135,6 +135,7 @@ void ACCharacter::End_Hitted()
 void ACCharacter::MultiCastPlayMontage_Implementation(UAnimMontage* montage)
 {
 	PlayAnimMontage(montage);
+
 }
 
 void ACCharacter::ServerPlayMontage_Implementation(UAnimMontage* Montage)

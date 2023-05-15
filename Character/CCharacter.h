@@ -7,7 +7,7 @@
 #include "GameFramework/Character.h"
 #include "CCharacter.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnCharacterHit);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnCharacterHit,bool);
 
 UCLASS()
 class AI_PORTPOLIO_API ACCharacter : public ACharacter
