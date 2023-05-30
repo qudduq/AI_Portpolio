@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/CCharacter.h"
 #include "UObject/NoExportTypes.h"
 #include "RPCUObject.generated.h"
 
@@ -14,7 +15,7 @@ class AI_PORTPOLIO_API URPCUObject : public UObject
 public:
 	FORCEINLINE virtual bool IsSupportedForNetworking() const override
 	{
-		return true;
+		return OwnerCharacter->IsFullNameStableForNetworking();
 	}
 	FORCEINLINE virtual bool ReplicateSubObjects(class AActorChannel* Channel, class FOutBunch* Bunch, struct FReplicationFlags* RepFlags)
 	{
