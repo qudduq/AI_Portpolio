@@ -22,31 +22,7 @@ class FCustomSettingsModule : public FDefaultGameModuleImpl
 			UnregisterSettings();
 		}
 	}
-
-	virtual bool SupportsDynamicReloading() override
-	{
-		return true;
-	}
-
 private:
-
-	// Callback for when the settings were saved.
-	bool HandleSettingsSaved()
-	{
-		UCustomProjectSetting* Settings = GetMutableDefault<UCustomProjectSetting>();
-		bool ResaveSettings = false;
-
-		// You can put any validation code in here and resave the settings in case an invalid
-		// value has been entered
-
-		if (ResaveSettings)
-		{
-			Settings->SaveConfig();
-		}
-
-		return true;
-	}
-
 	void RegisterSettings()
 	{
 		// Registering some settings is just a matter of exposijg the default UObject of
@@ -56,18 +32,20 @@ private:
 		if (ISettingsModule* SettingsModule = FModuleManager::GetModulePtr<ISettingsModule>("Settings"))
 		{
 			// Register the settings
-			ISettingsSectionPtr SettingsSection = SettingsModule->RegisterSettings("Project", "CustomProjectSetting", "General",
+			ISettingsSectionPtr SettingsSection = SettingsModule->RegisterSettings("Project", FApp::GetProjectName(), "General",
 				LOCTEXT("RuntimeGeneralSettingsName", "General"),
 				LOCTEXT("RuntimeGeneralSettingsDescription", "Base configuration for our game module"),
 				GetMutableDefault<UCustomProjectSetting>()
 			);
 
-			// Register the save handler to your settings, you might want to use it to
-			// validate those or just act to settings changes.
-			if (SettingsSection.IsValid())
-			{
-				SettingsSection->OnModified().BindRaw(this, &FCustomSettingsModule::HandleSettingsSaved);
-			}
+			ISettingsContainerPtr SettingsContainer = SettingsModule->GetContainer("Project");
+
+			//프로젝트 네임은 우선순위가 -1이고 Default로 설정되어있는 카테고리들은 0, 고급설정과 같이 사용자가 추가하는 카테고리는 1로
+			//기본 우선순위가 정해집니다.
+			auto str = FApp::GetProjectName();
+			SettingsContainer->DescribeCategory(FApp::GetProjectName(),
+				LOCTEXT("RuntimeWDCategoryName", "Custorm Settings"),
+				LOCTEXT("RuntimeWDCategoryDescription", "Game configuration for the CustomSettings game module"));
 		}
 	}
 
