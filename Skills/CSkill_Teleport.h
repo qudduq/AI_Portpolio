@@ -14,7 +14,7 @@ class AI_PORTPOLIO_API UCSkill_Teleport : public UCSkill
 {
 	GENERATED_BODY()
 
-private:
+protected:
 	UPROPERTY(EditAnywhere)
 		float TPDistance = 1000.0f;
 
@@ -23,6 +23,5 @@ public:
 	virtual void EndSkill(bool bHit) override;
 
 private:
-	void PlayerTeleport();
-	void AITeleport();
+	virtual void Teleport() PURE_VIRTUAL(UCSkill_Teleport::Teleport, );
 };

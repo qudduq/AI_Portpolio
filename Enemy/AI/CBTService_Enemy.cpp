@@ -20,19 +20,19 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
-	if (controller == nullptr) return;
+	if (IsValid(controller) == false) return;
 
 	ACEnemy_AI* ai = Cast<ACEnemy_AI>(controller->GetPawn());
-	if (ai == nullptr) return;
+	if (IsValid(ai) == false) return;
 
 	UCStateComponent* state = Cast<UCStateComponent>(ai->GetComponentByClass(UCStateComponent::StaticClass()));
-	if (state == nullptr) return;
+	if (IsValid(state) == false) return;
 
 	UCBehaviorComponent* behavior = Cast<UCBehaviorComponent>(ai->GetComponentByClass(UCBehaviorComponent::StaticClass()));
-	if (behavior == nullptr) return;
+	if (IsValid(behavior) == false) return;
 
 	ACPlayer* player = behavior->GetTargetPlayer();
-	if(player == nullptr)
+	if(IsValid(player) == false)
 		return;
 
 	if(state->IsHittedMode())

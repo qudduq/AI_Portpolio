@@ -6,6 +6,9 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Components/CBehaviorComponent.h"
+#include "EnvironmentQuery/EnvQueryManager.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Utillities/CLog.h"
 
 ACAIController::ACAIController()
 {
@@ -25,6 +28,24 @@ ACAIController::ACAIController()
 	Perception->ConfigureSense(*Sight);
 	Perception->SetDominantSense(*Sight->GetSenseImplementation());
 
+}
+
+void ACAIController::FindHidingSpot()
+{
+	CLog::Log("EQS management");
+	FEnvQueryRequest HidingSpotQueryRequest = FEnvQueryRequest(FindHidingSpotEQS, GetPawn());
+	HidingSpotQueryRequest.Execute(EEnvQueryRunMode::SingleResult, this, &ACAIController::MovetoQueryResult);
+}
+
+void ACAIController::MovetoQueryResult(TSharedPtr<FEnvQueryResult> result)
+{
+	if(result->IsSuccsessful())
+	{
+		auto pos = result->GetItemAsLocation(0);
+		auto pa = GetPawn()->GetActorLocation();
+		//UKismetSystemLibrary::DrawDebugCircle(GetWorld(), result->GetItemAsLocation(0), 100.0f,12,FLinearColor::Red,10.0f,100);
+		//MoveToLocation(result->GetItemAsLocation(0));
+	}
 }
 
 void ACAIController::BeginPlay()
@@ -60,6 +81,7 @@ void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 	for (AActor* actor : actors)
 	{
 		player = Cast<ACPlayer>(actor);
+		FindHidingSpot();
 
 		if (!!player)
 		{

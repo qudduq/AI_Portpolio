@@ -19,19 +19,19 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
-	if(controller == nullptr)
+	if(IsValid(controller) == false)
 	{
 		return Result;
 	}
 
 	ACEnemy_AI* owner = Cast<ACEnemy_AI>(controller->GetPawn());
-	if(owner == nullptr)
+	if(IsValid(owner) == false)
 	{
 		return Result;
 	}
 
 	UCStateComponent* stateComponent = Cast<UCStateComponent>(owner->GetComponentByClass(UCStateComponent::StaticClass()));
-	if (stateComponent == nullptr)
+	if (IsValid(stateComponent) == false)
 	{
 		return Result;
 	}
@@ -42,7 +42,7 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 	}
 
 	UCSkill* skill = ChoiceSkill(owner);
-	if (skill == nullptr)
+	if (IsValid(skill) == false)
 	{
 		FString str = "";
 		str += UEnum::GetValueAsString(SkillDistance);
