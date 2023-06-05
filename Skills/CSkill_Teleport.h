@@ -23,5 +23,6 @@ public:
 	virtual void EndSkill(bool bHit) override;
 
 private:
-	virtual void Teleport() PURE_VIRTUAL(UCSkill_Teleport::Teleport, );
+	virtual FVector GetTeleportLocation() { return OwnerCharacter->GetActorLocation(); }
+	void SetHiddenWeapon(bool bHidden);
 };

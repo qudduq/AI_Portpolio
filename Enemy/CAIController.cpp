@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "Components/CBehaviorComponent.h"
 #include "EnvironmentQuery/EnvQueryManager.h"
+#include "Components/CEQSComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Utillities/CLog.h"
 
@@ -14,6 +15,7 @@ ACAIController::ACAIController()
 {
 	Perception = CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
 	Blackboard = CreateDefaultSubobject<UBlackboardComponent>("Blackboard");
+	EQSComponent = CreateDefaultSubobject<UCEQSComponent>("EQSComponent");
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
 	Sight->SightRadius = 1000;
@@ -30,22 +32,9 @@ ACAIController::ACAIController()
 
 }
 
-void ACAIController::FindHidingSpot()
+FVector ACAIController::GetEQSPostion()
 {
-	CLog::Log("EQS management");
-	FEnvQueryRequest HidingSpotQueryRequest = FEnvQueryRequest(FindHidingSpotEQS, GetPawn());
-	HidingSpotQueryRequest.Execute(EEnvQueryRunMode::SingleResult, this, &ACAIController::MovetoQueryResult);
-}
-
-void ACAIController::MovetoQueryResult(TSharedPtr<FEnvQueryResult> result)
-{
-	if(result->IsSuccsessful())
-	{
-		auto pos = result->GetItemAsLocation(0);
-		auto pa = GetPawn()->GetActorLocation();
-		//UKismetSystemLibrary::DrawDebugCircle(GetWorld(), result->GetItemAsLocation(0), 100.0f,12,FLinearColor::Red,10.0f,100);
-		//MoveToLocation(result->GetItemAsLocation(0));
-	}
+	return EQSComponent->GetEQSPostion();
 }
 
 void ACAIController::BeginPlay()
@@ -81,7 +70,7 @@ void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 	for (AActor* actor : actors)
 	{
 		player = Cast<ACPlayer>(actor);
-		FindHidingSpot();
+		EQSComponent->GetEQSPostion();
 
 		if (!!player)
 		{

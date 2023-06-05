@@ -6,7 +6,6 @@
 
 
 struct FEnvQueryResult;
-class UEnvQuery;
 UCLASS()
 class AI_PORTPOLIO_API ACAIController : public AAIController
 {
@@ -28,8 +27,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		float FarActionRange = 1000;
 
-	UPROPERTY(EditAnywhere, Category = "EQS")
-		UEnvQuery* FindHidingSpotEQS;
+private:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCEQSComponent* EQSComponent;
 
 public:
 	ACAIController();
@@ -39,10 +39,7 @@ public:
 	FORCEINLINE float GetMiddleActionRange() { return MiddleActionRange; }
 	FORCEINLINE float GetFarActionRange() { return FarActionRange; }
 
-	UFUNCTION(BlueprintCallable)
-		void FindHidingSpot();
-
-	void MovetoQueryResult(TSharedPtr<FEnvQueryResult> result);
+	FVector GetEQSPostion();
 
 protected:
 	virtual void BeginPlay() override;
