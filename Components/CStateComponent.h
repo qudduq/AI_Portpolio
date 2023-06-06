@@ -45,7 +45,6 @@ public:
 	void RegisterDelegate(const FStateTypeChanged::FDelegate& ObserverDelegate);
 	void UnregisterDelegate(const FDelegateHandle& handle);
 
-	FOnIdleMode OnIdleMode;
 private:
 	EStateType Type;
 	FStateTypeChanged OnStateTypeChanged;

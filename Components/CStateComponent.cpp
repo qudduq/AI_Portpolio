@@ -16,11 +16,6 @@ void UCStateComponent::BeginPlay()
 void UCStateComponent::SetIdleMode()
 {
 	ChangeType(EStateType::Idle);
-	if(OnIdleMode.IsBound() == true)
-	{
-		CLog::Log("SetIdle");
-		OnIdleMode.Execute(Cast<AAIController>(GetOwner()->GetInstigatorController()));
-	}
 }
 
 void UCStateComponent::SetActionMode()

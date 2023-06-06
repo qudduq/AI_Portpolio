@@ -20,7 +20,6 @@ public:
 	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 protected:
-	class UCSkill* ChoiceSkill(class ACCharacter* OwnerCharacter);
-	void EndAction(AAIController* controller);
+	void ChoiceAndExcuteSkill(class ACCharacter* OwnerCharacter);
 
 };

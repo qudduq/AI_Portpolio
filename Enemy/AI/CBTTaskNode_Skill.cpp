@@ -7,6 +7,7 @@
 #include "Enemy/CEnemy_AI.h"
 #include "Skills/CSkill.h"
 #include "Utillities/CLog.h"
+#include "Utillities/TaskHelper.h"
 
 UCBTTaskNode_Skill::UCBTTaskNode_Skill()
 {
@@ -40,20 +41,9 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 	{
 		return Result;
 	}
+	ChoiceAndExcuteSkill(owner);
 
-	UCSkill* skill = ChoiceSkill(owner);
-	if (IsValid(skill) == false)
-	{
-		FString str = "";
-		str += UEnum::GetValueAsString(SkillDistance);
-		str += " have Not Skill";
-		CLog::Log(str);
-		return Result;
-	}
-	stateComponent->OnIdleMode.BindUObject(this, &UCBTTaskNode_Skill::EndAction);
-	skill->ExcuteSkill(owner);
-
-	return EBTNodeResult::InProgress;
+	return EBTNodeResult::Succeeded;
 }
 
 EBTNodeResult::Type UCBTTaskNode_Skill::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -68,70 +58,31 @@ EBTNodeResult::Type UCBTTaskNode_Skill::AbortTask(UBehaviorTreeComponent& OwnerC
 	return Result;
 }
 
-UCSkill* UCBTTaskNode_Skill::ChoiceSkill(ACCharacter* OwnerCharacter)
+void UCBTTaskNode_Skill::ChoiceAndExcuteSkill(ACCharacter* OwnerCharacter)
 {
-	UCSkillComponent* skillComponent = Cast<UCSkillComponent>(OwnerCharacter->GetComponentByClass(UCSkillComponent::StaticClass()));
-	if (skillComponent == nullptr)
-	{
-		FString str = OwnerCharacter->GetName();
-		str += " Not SkillComponent";
-		CLog::Log(str);
-		return nullptr;
-	}
+	UCSkillComponent* skillComponent = TaskHelper::GetComponet<UCSkillComponent>(OwnerCharacter);
+	if(IsValid(skillComponent) == false)
+		return;
 
-	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
-	if(WeaponComponent == nullptr)
-	{
-		FString str = OwnerCharacter->GetName();
-		str += " Not WeaponComponent";
-		CLog::Log(str);
-	}
+	UCWeaponComponent* WeaponComponent = TaskHelper::GetComponet<UCWeaponComponent>(OwnerCharacter);
+	if(IsValid(WeaponComponent) == false)
+		return;
 
 	TArray<UCSkill*> skills;
 	for (const auto & skill : skillComponent->GetSkillArrayData(WeaponComponent->GetWeaponType()))
 	{
 		if (skill->GetSkillDistance() == SkillDistance)
 		{
-			skills.Add(skill);
+			skills.Emplace(skill);
 		}
 	}
 
 	int maxSkillNum = skills.Num() - 1;
 	if (maxSkillNum < 0)
 	{
-		return nullptr;
+		return;
 	}
 
 	int RandomSkill = FMath::RandRange(0, maxSkillNum);
-
-	return skills[RandomSkill];
-}
-
-
-void UCBTTaskNode_Skill::EndAction(AAIController* controller)
-{
-	if (controller == nullptr)
-		return;
-
-	UBehaviorTreeComponent* BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(controller->GetBrainComponent());
-	if (BehaviorTreeComponent == nullptr)
-		return;
-
-	ACCharacter* owner = Cast<ACCharacter>(controller->GetPawn());
-	if (owner == nullptr)
-		return;
-
-	UCStateComponent* stateComponent = Cast<UCStateComponent>(owner->GetComponentByClass(UCStateComponent::StaticClass()));
-	if (stateComponent == nullptr)
-		return;
-
-	UCBehaviorComponent* behaviorComponent = Cast<UCBehaviorComponent>(owner->GetComponentByClass(UCBehaviorComponent::StaticClass()));
-	if (behaviorComponent == nullptr)
-		return;
-
-	CLog::Log("TaskEndAction");
-	stateComponent->OnIdleMode.Unbind();
-	behaviorComponent->SetWaitMode();
-
-	FinishLatentTask(*BehaviorTreeComponent, EBTNodeResult::Succeeded);
+	skills[RandomSkill]->ExcuteSkill(OwnerCharacter);
 }
