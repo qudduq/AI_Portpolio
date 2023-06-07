@@ -37,12 +37,20 @@ EBTNodeResult::Type UCBTTaskNode_Skill::ExecuteTask(UBehaviorTreeComponent& Owne
 		return Result;
 	}
 
-	if(stateComponent->IsActionMode())
+	UCBehaviorComponent* BehaviorComponent = TaskHelper::GetComponet<UCBehaviorComponent>(owner);
+	if(IsValid(BehaviorComponent) == false)
 	{
 		return Result;
 	}
+
+	if(stateComponent->IsIdleMode() == false)
+	{
+		return Result;
+	}
+
 	ChoiceAndExcuteSkill(owner);
 
+	BehaviorComponent->SetWaitMode();
 	return EBTNodeResult::Succeeded;
 }
 

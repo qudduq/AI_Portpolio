@@ -3,16 +3,34 @@
 
 #include "Skills/CSkill_Teleport_Enemy.h"
 #include "Enemy/CAIController.h"
+#include "Enemy/CEnemy_AI.h"
+#include "EnvironmentQuery/EnvQueryManager.h"
 #include "Utillities/CLog.h"
 
-FVector UCSkill_Teleport_Enemy::GetTeleportLocation()
+void UCSkill_Teleport_Enemy::BeginSkill()
 {
-	ACAIController* AIController = Cast<ACAIController>(OwnerCharacter->GetController());
-	if(IsValid(AIController) == false)
+	Super::BeginSkill();
+	CLog::Log("Find Position EQS");
+	if(ACEnemy_AI* enemy = Cast<ACEnemy_AI>(OwnerCharacter))
 	{
-		CLog::Log("Enemy Teleport False");
-		return OwnerCharacter->GetActorLocation();
+		CLog::Log("Owner is Not Enemy_AI");
+		return;
 	}
 
-	return AIController->GetEQSPostion();
+	FEnvQueryRequest HidingSpotQueryRequest = FEnvQueryRequest(EQSOptionData, OwnerCharacter);
+	HidingSpotQueryRequest.Execute(EEnvQueryRunMode::SingleResult, this, &UCSkill_Teleport_Enemy::EQSTeleport);
+}
+
+void UCSkill_Teleport_Enemy::EQSTeleport(TSharedPtr<FEnvQueryResult> result)
+{
+	if (result->IsSuccsessful())
+	{
+		auto pos = result->GetItemAsLocation(0);
+		CLog::Log(pos);
+		OwnerCharacter->TeleportTo(pos, OwnerCharacter->GetActorRotation());
+	}
+	else
+	{
+		CLog::Log("EQS Find False");
+	}
 }

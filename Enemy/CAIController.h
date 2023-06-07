@@ -27,19 +27,14 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		float FarActionRange = 1000;
 
-private:
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCEQSComponent* EQSComponent;
-
 public:
 	ACAIController();
 
-	FORCEINLINE void SetTeamID(uint8 teamId) { TeamID = teamId; return; }
+	FORCEINLINE void SetTeamID(uint8 teamId) { TeamID = teamId; }
+	FORCEINLINE uint8 GetTeamID() { return TeamID; }
 	FORCEINLINE float GetCloseActionRange() { return CloseActionRange; }
 	FORCEINLINE float GetMiddleActionRange() { return MiddleActionRange; }
 	FORCEINLINE float GetFarActionRange() { return FarActionRange; }
-
-	FVector GetEQSPostion();
 
 protected:
 	virtual void BeginPlay() override;

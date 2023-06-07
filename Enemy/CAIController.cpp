@@ -7,7 +7,6 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "Components/CBehaviorComponent.h"
 #include "EnvironmentQuery/EnvQueryManager.h"
-#include "Components/CEQSComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Utillities/CLog.h"
 
@@ -15,7 +14,6 @@ ACAIController::ACAIController()
 {
 	Perception = CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
 	Blackboard = CreateDefaultSubobject<UBlackboardComponent>("Blackboard");
-	EQSComponent = CreateDefaultSubobject<UCEQSComponent>("EQSComponent");
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
 	Sight->SightRadius = 1000;
@@ -30,11 +28,6 @@ ACAIController::ACAIController()
 	Perception->ConfigureSense(*Sight);
 	Perception->SetDominantSense(*Sight->GetSenseImplementation());
 
-}
-
-FVector ACAIController::GetEQSPostion()
-{
-	return EQSComponent->GetEQSPostion();
 }
 
 void ACAIController::BeginPlay()
@@ -70,7 +63,6 @@ void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 	for (AActor* actor : actors)
 	{
 		player = Cast<ACPlayer>(actor);
-		EQSComponent->GetEQSPostion();
 
 		if (!!player)
 		{

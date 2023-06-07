@@ -14,6 +14,9 @@ class AI_PORTPOLIO_API UCSkill_Teleport_Player : public UCSkill_Teleport
 {
 	GENERATED_BODY()
 
+public:
+	virtual void BeginSkill() override;
+
 private:
 	virtual FVector GetTeleportLocation() override;
 };

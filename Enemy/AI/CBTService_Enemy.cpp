@@ -32,8 +32,11 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	if (IsValid(behavior) == false) return;
 
 	ACPlayer* player = behavior->GetTargetPlayer();
-	if(IsValid(player) == false)
+	if (IsValid(player) == false)
+	{
+		CLog::Log("Not Search Player");
 		return;
+	}
 
 	if(state->IsHittedMode())
 		return;
@@ -45,6 +48,7 @@ void UCBTService_Enemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	float distance = ai->GetDistanceTo(player);
 	if (distance < controller->GetCloseActionRange())
 	{
+		CLog::Log("Close Action");
 		behavior->SetcloseActionMode();
 	}
 	else if (distance < controller->GetMiddleActionRange())

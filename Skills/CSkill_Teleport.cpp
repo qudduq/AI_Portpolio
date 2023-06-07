@@ -11,12 +11,11 @@
 void UCSkill_Teleport::BeginSkill()
 {
 	Super::BeginSkill();
+
 	OwnerCharacter->SetHidden(true);
 	SetHiddenWeapon(true);
 
 	PlaySkillEffect(OwnerCharacter->GetWorld(),OwnerCharacter->GetActorLocation());
-
-	OwnerCharacter->TeleportTo(GetTeleportLocation(), OwnerCharacter->GetActorRotation());
 }
 
 void UCSkill_Teleport::EndSkill(bool bHit)
